@@ -4,10 +4,15 @@ namespace App\Http\Controllers;
 
 use App\Faculty;
 use App\Schedule;
+use App\Appointment;
+use Carbon\Carbon;
+use Dotenv\Exception\ValidationException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class AppointmentController extends Controller
 {
+
 
     /**
      * Display a listing of the resource.
@@ -43,9 +48,10 @@ class AppointmentController extends Controller
     public function findSlots(Request $request){
         $f_id=$request->f_id;
         $date=$request->date;
-//        $date=date("Y-m-d", strtotime($request->get('date')));
+      //  $date=date("Y-m-d", strtotime($request->get('date')));
         $day=date("D", strtotime($date));
         $day=strtolower($day);
+
 
         $schedule=null;
         $schedule=Schedule::select('starts_at','ends_at')->distinct()->
@@ -62,8 +68,24 @@ class AppointmentController extends Controller
 
 
            // $data["msg"]="No slots available";
+//            $data["date"]=$date;
 
         return response()->json($data);//then sent this data to ajax success
+
+    }
+
+    public function findAppointments(Request $request){
+        $f_id=$request->f_id;
+        $date=$request->date;
+        $slot=$request->slot;
+
+        //$request->id here is the id of our chosen option id
+        $data = Appointment::select('starts_at', 'ends_at')->
+        where('f_id', $f_id)->where('date',$date)->where('slot',$slot)->get();
+
+
+        return response()->json($data);//then sent this data to ajax success
+
     }
 
     public function searchFaculty(Request $request){
@@ -87,12 +109,45 @@ class AppointmentController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
+     * @throws \Illuminate\Validation\ValidationException
      */
     public function store(Request $request)
     {
-        //
+        try {
+            $this->validate($request, [
+                'faculty' => 'required',
+                'date' => 'required',
+                'starts_at' => 'required',
+                'ends_at' => 'required',
+                'slot' => 'required',
+            ]);
+        } catch (ValidationException $e) {
+        }
+
+        $starts=Carbon::createFromFormat('H:i a', $request->starts_at)->toTimeString();
+        $ends=Carbon::createFromFormat('H:i a', $request->ends_at)->toTimeString();
+
+        $isAvailable=Appointment::select('id')->
+        where('f_id',$request->faculty)->where('date',$request->date)->
+        whereBetween('starts_at',[$starts,$ends])->whereBetween('ends_at',[$starts,$ends])->first();
+
+        if (empty($isAvailable)) {
+            $appointment = new Appointment();
+            $appointment->s_id = Auth::user()->s_id;
+            $appointment->f_id = $request->faculty;
+            $appointment->date = $request->date;
+            $appointment->slot = $request->slot;
+            $appointment->starts_at = $starts;
+            $appointment->ends_at = $ends;
+            $appointment->status = "Pending";
+            $appointment->message = $request->message;
+
+            $appointment->save();
+        }
+        else
+            return response('appointment taken');
     }
 
     /**

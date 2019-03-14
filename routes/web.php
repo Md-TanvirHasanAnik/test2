@@ -33,13 +33,26 @@ Route::post ('register_faculty',  'AuthFaculty\RegisterController@register');
 
 
 Route::get('/home', 'HomeController@index')->name('home');
-Route::get('/faculty_home', 'FacultyHomeController@index')->name('faculty.home');
+Route::get('/faculty/home', 'FacultyHomeController@index')->name('faculty.home');
 
-Route::get('/schedule', 'ScheduleController@index');
-Route::post('store', 'ScheduleController@store')->name('store');
+Route::get('/schedules/add', 'ScheduleController@index')->name('schedule.add');
+Route::post('/schedules/store', 'ScheduleController@store')->name('schedule.store');
 
-Route::get('/appointment', 'AppointmentController@index');
-Route::get('/findFaculty', 'AppointmentController@findFaculty')->name('faculty.find');
-Route::get('/searchFaculty', 'AppointmentController@searchFaculty')->name('faculty.search');
-Route::get('/findSlots', 'AppointmentController@findSlots')->name('faculty.slots');
+Route::get('/appointments/add', 'AppointmentController@index')->name('appointment.add');
+Route::get('/findFaculty', 'AppointmentController@findFaculty')->name('appointment.findFaculty');
+Route::get('/searchFaculty', 'AppointmentController@searchFaculty')->name('appointment.searchFaculty');
+Route::get('/findSlots', 'AppointmentController@findSlots')->name('appointment.findSlots');
+Route::post('/appointments/store', 'AppointmentController@store')->name('appointment.store');
 
+Route::get('/findAppointments', 'AppointmentController@findAppointments')->name('appointment.findAppointments');
+Route::get ('/student/{id}', 'StudentController@showInfo')->name('student.info');
+Route::get ('/faculty/{id}', 'FacultyController@showInfo')->name('faculty.info');
+
+
+Route::post ('/appointments', 'AppointmentController@showInfo')->name('student.appointments');
+Route::post ('/faculties', 'FacultyController@showInfo')->name('student.faculties');
+Route::post ('/profile', 'FacultyController@showInfo')->name('student.profile');
+
+Route::post ('/faculty/appointments', 'AppointmentController@showInfo')->name('faculty.appointments');
+Route::post ('/faculty/schedule', 'FacultyController@showInfo')->name('faculty.schedule');
+Route::post ('/faculty/profile', 'FacultyController@showInfo')->name('faculty.profile');

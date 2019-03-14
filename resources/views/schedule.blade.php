@@ -7,7 +7,7 @@
         <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
         <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.5.0/css/bootstrap-datepicker.css" rel="stylesheet">
         <link rel="stylesheet" type="text/css" href="https://unpkg.com/magic-input/dist/magic-input.min.css">
-      <link rel="stylesheet" type="text/css" href="bower_components/magic-check/css/magic-check.css">
+      {{--<link rel="stylesheet" type="text/css" href="bower_components/magic-check/css/magic-check.css">--}}
       <link href="{{ URL::asset('css/styles.css') }}" rel="stylesheet" type="text/css" >
     @endpush
     @push('scripts')

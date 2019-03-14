@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Appointment;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class FacultyHomeController extends Controller
 {
@@ -15,6 +17,15 @@ class FacultyHomeController extends Controller
 
     public function index()
     {
-        return view('faculty_home');
+
+//        $appointments=Appointment::all();
+
+        $appointments = DB::table('appointments')
+            ->join('users', 'appointments.s_id', '=', 'users.s_id')
+            ->select('appointments.*','users.name', 'users.email', 'users.phone')
+            ->get();
+
+
+        return view('faculty_home')->with('appointments',$appointments);
     }
 }

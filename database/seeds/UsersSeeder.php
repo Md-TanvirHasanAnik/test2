@@ -14,9 +14,9 @@ class UsersSeeder extends Seeder
     {
         //
         $user=new User();
-        $user->s_id="11";
+        $user->s_id="1";
         $user->name="User 1";
-        $user->dept="CSE";
+        $user->department="CSE";
         $user->email="a@a.com";
         $user->password=crypt("123456","");
         $user->phone="01234567890";

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\TimeSlot;
 use App\Schedule;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
 
 class ScheduleController extends Controller
@@ -50,6 +51,9 @@ class ScheduleController extends Controller
      */
     public function store(Request $request)
     {
+
+       // return response()->json($request->all());
+
         try {
             $this->validate($request, [
                 'starts_at' => 'required',
@@ -68,7 +72,7 @@ class ScheduleController extends Controller
             $a=array();
 
                 $schedule=new Schedule;
-                $schedule->f_id="1";
+                $schedule->f_id=Auth::user()->f_id;
                 $schedule->slot=$slot;
                 $schedule->starts_at=$sa;
                 $schedule->ends_at=$ea;
@@ -91,8 +95,8 @@ class ScheduleController extends Controller
                 $i++;
         }
 
-        // $schedule->save();
-         return $schedule;
+         $schedule->save();
+         //return $schedule;
       }
 
 
@@ -119,7 +123,7 @@ class ScheduleController extends Controller
        // echo '</pre>';
         //end splitting
 
-
+//        return $schedule;
 }
 
     /**

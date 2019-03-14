@@ -1,95 +1,65 @@
-
 @extends('layouts.app')
 
 @section('content')
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">Student Dashboard</div>
 
-                <div class="card-body">
-                    @if (session('status'))
-                        <div class="alert alert-success" role="alert">
-                            {{ session('status') }}
-                        </div>
-                    @endif
+    <link href="{{ URL::asset('css/styles.css') }}" rel="stylesheet" type="text/css" >
+    <link href="{{ asset('css/fontawesome-all.css') }}" rel="stylesheet">
 
-                        <div id="form" class="form-area">
-                            <form action="#" id="appointmentForm" method="post" accept-charset="utf-8">
-                                <input type="hidden" name="csrf_stream_token" value="447a6832bb22061e6b48ae857b7bf5c8" />
-
-                                <div class="form-padding">
-                                    <h4>Appointment Form</h4>
-
-
-
-                                    <div class="form-group">
-                                        <label>Department Name <i class="text-danger">*</i></label>
-                                        <select name="department_id" class="form-control" id="department_id">
-                                            <option value="" selected="selected">Select Department</option>
-                                            <option value="12">CSE</option>
-                                            <option value="13">SWE</option>
-                                            <option value="14">EEE</option>
-                                            <option value="15">BBA</option>
-                                            <option value="16">Textile</option>
-                                            <option value="17">LLB</option>
-                                            <option value="19">Pharmacy</option>
-                                            <option value="21">NFE</option>
-                                        </select>
-                                        <span class="doctor_error"></span>
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label>Faculty Name<i class="text-danger">*</i></label>
-                                        <select name="doctor_id" class="form-control" id="doctor_id">
-                                            <option value="0"></option>
-                                        </select>
-                                        <p class="help-block" id="available_days"></p>
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label>Appointment Date <i class="text-danger">*</i></label>
-                                        <div class="input-group date col-md-4" data-provide="datepicker">
-                                            <input type="text" name="date" class="form-control" placeholder="dd-mm-yyyy">
-                                            <div class="input-group-addon">
-                                                <span class="glyphicon glyphicon-th"></span>
-                                            </div>
-                                        </div>
-
-                                        <div class="form-group">
-                                            <label>Select Time<i class="text-danger">*</i></label>
-                                            <input name="time_id" autocomplete="off" type="text" class="form-control" id="patient_id" placeholder="Time" value="">
-                                            <span></span>
-                                        </div>
-
-                                    <div class="form-group">
-                                        <input type="hidden" name="schedule_id" id="schedule_id"/>
-                                        <input type="hidden" name="serial_no" id="serial_no"/>
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label>Problem </label>
-                                        <textarea name="problem" class="form-control" placeholder="Problem"  rows="7"></textarea>
-                                    </div>
-
-                                </div>
-
-                                <div class="form-footer">
-                                    <div class="checkbox">
-                                        <label></label>
-                                    </div>
-                                    <button type="submit" id="submit" class="btn thm-btn">Submit</button>
-                                </div>
-                                </div>
-                            </form>
-                        </div>
+    <div class="card-body">
+        @if (session('status'))
+            <div class="alert alert-success" role="alert">
+                {{ session('status') }}
             </div>
-        </div>
+        @endif
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title">Recent Appointments</h5>
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body table-responsive-md p-0">
+                        <table class="table">
+
+                            @foreach($appointments as $appointment)
+                                <tr>
+                                    <td class="td-image">
+                                        <a href="{{url("/faculty/$appointment->s_id")}}" data-toggle="tooltip" data-original-title="{{$appointment->name}}"><img src="https://appointo.froid.works/img/default-avatar-user.png" class="border img-bordered-sm img-size-50 img-circle"  ></a>
+                                    </td>
+                                    <td>
+                                        <a class="text-uppercase" href="{{url("/student/$appointment->f_id")}}">{{$appointment->name}}</a><br>
+                                        <i class="far fa-envelope"></i>{{$appointment->email}}<br>
+                                        <i class="fas fa-mobile-alt"></i>{{$appointment->phone}}
+                                    </td>
+                                    <td class="text-muted">
+                                        <i class="far fa-calendar"></i>{{$appointment->date}}<br>
+                                        <i class="far fa-clock"></i>{{$appointment->starts_at}} - {{$appointment->ends_at}}
+                                    </td>
+                                    <td class="td-message">
+                                        <p>{{$appointment->message}}</p>
+                                    </td>
+                                    <td class="td-status">
+                                        @if($appointment->status=='completed')
+                                            <span class="text-uppercase small border border-success text-success badge-pill">{{$appointment->status}}</span>
+                                        @elseif($appointment->status=='cancelled')
+                                            <span class="text-uppercase small border border-danger text-danger badge-pill">{{$appointment->status}}</span>
+                                        @elseif($appointment->status=='pending')
+                                            <span class="text-uppercase small border border-warning text-warning badge-pill">{{$appointment->status}}</span>
+                                        @elseif($appointment->status=='inprogress')
+                                            <span class="text-uppercase small border border-primary text-primary  badge-pill">{{$appointment->status}}</span>
+                                        @endif
+                                    </td>
+                                </tr>
+                            @endforeach
+
+                        </table>
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+                <!-- /.card -->
+            </div>
+        </div><!-- /.row -->
     </div>
-</div>
-</div>
-
-
 @endsection
 
