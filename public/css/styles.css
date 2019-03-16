@@ -3,6 +3,14 @@ td,th{
     vertical-align: inherit !important;
 }
 
+.body-box{
+    padding: 3%;
+    margin-top: 2%;
+    margin-bottom: 3%;
+    border-radius: 0.5rem;
+    background: #fff;
+}
+
 .td-status,.td-image{
     text-align: center;
 }
@@ -137,3 +145,4 @@ a {
 }
 
 /*appointment table*/
+

@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('student.app')
 
 @section('content')
 
@@ -49,6 +49,11 @@
                                         @elseif($appointment->status=='inprogress')
                                             <span class="text-uppercase small border border-primary text-primary  badge-pill">{{$appointment->status}}</span>
                                         @endif
+                                    </td>
+                                    <td>
+                                        <br><br><a href="javascript:;" data-booking-id="7" class="btn btn-rounded btn-outline-dark btn-sm send-reminder"><i class="fa fa-send"></i>Edit</a>
+                                        <br><br><a href="javascript:;" data-booking-id="7" class="btn btn-rounded btn-outline-dark btn-sm send-reminder"><i class="fa fa-send"></i>Cancel</a>
+                                        <br><br><a href="javascript:;" data-booking-id="7" class="btn btn-rounded btn-outline-dark btn-sm send-reminder"><i class="fa fa-send"></i>Delete</a>
                                     </td>
                                 </tr>
                             @endforeach

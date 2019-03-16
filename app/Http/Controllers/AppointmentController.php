@@ -34,7 +34,7 @@ class AppointmentController extends Controller
     public function index()
     {
         $faculty=Faculty::all();//get data from table
-        return view('add_appointment')->with('faculty',$faculty);
+        return view('student.addAppointment')->with('faculty',$faculty);
     }
 
     public function findFaculty(Request $request){

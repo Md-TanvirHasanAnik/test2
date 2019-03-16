@@ -1,5 +1,5 @@
 
-@extends('layouts.app')
+@extends('student.app')
 
 @push('styles')
 @endpush
@@ -16,8 +16,8 @@
 <script src="{{ asset('airdate/js/datepicker.js') }}" defer></script>
 <script src="{{ asset('mdtime/mdtimepicker.js') }}" defer></script>
 
-    <div class="container col-md-12">
-    <div class="row justify-content-center">
+    <div class="container ">
+    <div class="row ">
         <div class="col-md-10">
 
             {{--<div class="col-md-6 " style="float:right;">--}}

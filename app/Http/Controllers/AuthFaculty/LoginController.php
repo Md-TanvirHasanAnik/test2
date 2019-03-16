@@ -28,7 +28,7 @@ class LoginController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/faculty_home';
+    protected $redirectTo = '/faculty/home';
 
     /**
      * Create a new controller instance.
@@ -47,7 +47,7 @@ class LoginController extends Controller
      */
     public function showLoginForm()
     {
-        return view('auth_faculty.login');
+        return view('authFaculty.login');
     }
 
     /**
@@ -77,6 +77,6 @@ class LoginController extends Controller
         // Delete single session key (just for this user)
         $request->session()->forget($sessionKey);
 
-        return $this->loggedOut($request) ?: redirect('/login_faculty');
+        return $this->loggedOut($request) ?: redirect('/faculty/login');
     }
 }

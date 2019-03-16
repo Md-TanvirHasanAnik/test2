@@ -29,9 +29,10 @@ class HomeController extends Controller
         $appointments = DB::table('appointments')
             ->join('faculties', 'appointments.f_id', '=', 'faculties.f_id')
             ->select('appointments.*','faculties.name', 'faculties.email', 'faculties.phone')
+            ->where('appointments.status','=','pending')
             ->get();
 
 
-        return view('home')->with('appointments',$appointments);
+        return view('student.home')->with('appointments',$appointments);
     }
 }

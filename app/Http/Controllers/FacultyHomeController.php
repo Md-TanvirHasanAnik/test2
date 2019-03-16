@@ -21,11 +21,11 @@ class FacultyHomeController extends Controller
 //        $appointments=Appointment::all();
 
         $appointments = DB::table('appointments')
-            ->join('users', 'appointments.s_id', '=', 'users.s_id')
-            ->select('appointments.*','users.name', 'users.email', 'users.phone')
+            ->join('students', 'appointments.s_id', '=', 'students.s_id')
+            ->select('appointments.*','students.name', 'students.email', 'students.phone')
             ->get();
 
 
-        return view('faculty_home')->with('appointments',$appointments);
+        return view('faculty.home')->with('appointments',$appointments);
     }
 }

@@ -30,7 +30,7 @@ class RegisterController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/faculty_home';
+    protected $redirectTo = '/faculty/home';
 
     /**
      * Create a new controller instance.
@@ -86,7 +86,7 @@ class RegisterController extends Controller
      */
     public function showRegistrationForm()
     {
-        return view('auth_faculty.register');
+        return view('authFaculty.register');
     }
 
     /**

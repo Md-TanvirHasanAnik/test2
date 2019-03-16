@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\TimeSlot;
 use App\Schedule;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 
 class ScheduleController extends Controller
@@ -30,7 +31,15 @@ class ScheduleController extends Controller
     {
         $slots=TimeSlot::all();
        // return $slots;
-        return view('schedule')->with('slots',$slots);
+
+        $schedules = DB::table('schedules')
+            ->select('schedules.*')
+            ->where('f_id',Auth::user()->f_id)
+            ->get();
+
+//        return $schedules;
+//        return $slots;
+        return view('faculty.schedule',compact('slots','schedules'));
     }
 
     /**
