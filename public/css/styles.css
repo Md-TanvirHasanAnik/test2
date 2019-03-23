@@ -1,3 +1,4 @@
+
 td,th{
 	text-align: left;
     vertical-align: inherit !important;
@@ -15,6 +16,11 @@ td,th{
     text-align: center;
 }
 
+.td-message{
+    word-wrap: break-word;
+    overflow: hidden;
+    width: 20%;
+}
 
 i{
     padding-right: 4px;
@@ -139,10 +145,6 @@ a {
     content: "\F1D8";
 }
 
-.fa-send-o:before,
-.fa-paper-plane-o:before {
-    content: "\F1D9";
-}
 
 /*appointment table*/
 

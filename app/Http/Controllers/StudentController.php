@@ -31,7 +31,7 @@ class StudentController extends Controller
         $appointments = DB::table('appointments')
             ->join('faculties', 'appointments.f_id', '=', 'faculties.f_id')
             ->select('appointments.*','faculties.name', 'faculties.email', 'faculties.phone')
-            ->get();
+            ->paginate(10);
 
 
         return view('student.appointments')->with('appointments',$appointments);

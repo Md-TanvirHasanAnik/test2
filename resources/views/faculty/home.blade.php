@@ -13,6 +13,8 @@
                     @endif
 
                         <div class="row">
+                            <div class="card col-md-12">
+                                <br><br>
                             <div class="col-md-12">
                                 <div class="card">
                                     <div class="card-header">
@@ -55,11 +57,14 @@
                                             @endforeach
 
                                         </table>
+                                        {{$appointments->links()}}
+                                        <br>
                                     </div>
                                     <!-- /.card-body -->
                                 </div>
                                 <!-- /.card -->
                             </div>
+                        </div>
                         </div><!-- /.row -->
             </div>
 @endsection

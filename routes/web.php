@@ -38,18 +38,21 @@ Route::get('/faculty/home', 'FacultyHomeController@index')->name('faculty.home')
 Route::get('/schedules', 'ScheduleController@index')->name('faculty.schedule');
 Route::post('/schedules/store', 'ScheduleController@store')->name('faculty.schedule.store');
 
-Route::get('/appointments/add', 'AppointmentController@index')->name('appointment.add');
-Route::get('/findFaculty', 'AppointmentController@findFaculty')->name('appointment.findFaculty');
-Route::get('/searchFaculty', 'AppointmentController@searchFaculty')->name('appointment.searchFaculty');
-Route::get('/findSlots', 'AppointmentController@findSlots')->name('appointment.findSlots');
+Route::get('/appointments/add', 'AppointmentController@appointmentForm')->name('appointment.add');
+Route::get('/ajax/findFaculty', 'AjaxDataController@findFaculty')->name('appointment.findFaculty');
+Route::get('/ajax/searchFaculty', 'AjaxDataController@searchFaculty')->name('appointment.searchFaculty');
+Route::get('/ajax/findSlots', 'AjaxDataController@findSlots')->name('appointment.findSlots');
 Route::post('/appointments/store', 'AppointmentController@store')->name('appointment.store');
-Route::get('/findAppointments', 'AppointmentController@findAppointments')->name('appointment.findAppointments');
+Route::get('/ajax/findAppointments', 'AjaxDataController@findAppointments')->name('appointment.findAppointments');
+Route::get ('/ajax/cancelFromStudent', 'AppointmentController@cancel')->name('appointment.cancel');
+Route::get ('/ajax/deleteFromStudent', 'AppointmentController@delete')->name('appointment.delete');
+Route::get ('ajax/studentAppointments', 'AjaxDataController@studentAppointments')->name('ajax.studentAppointments');
 
 Route::get ('/students/{id}', 'StudentController@showInfo')->name('student.info');
 Route::get ('/faculties/{id}', 'FacultyController@showInfo')->name('faculty.info');
 
 
-Route::get ('/appointments', 'StudentController@appointments')->name('student.appointments');
+Route::get ('/appointments', 'AppointmentController@index')->name('student.appointments');
 Route::get ('/faculties', 'StudentController@faculties')->name('student.faculties');
 Route::get ('/profile', 'StudentController@profile')->name('student.profile');
 Route::get ('/profile/edit', 'StudentController@editProfile')->name('student.editProfile');
@@ -57,5 +60,5 @@ Route::get ('/profile/edit', 'StudentController@editProfile')->name('student.edi
 
 //Route::get ('/faculty/schedules', 'FacultyController@schedules')->name('faculty.schedule');
 Route::get ('/faculty/profile', 'FacultyController@profile')->name('faculty.profile');
-Route::get ('/faculty/appointments', 'FacultyController@appointments')->name('faculty.appointments');
+Route::get ('/faculty/appointments', 'AppointmentFacultyController@index')->name('faculty.appointments');
 Route::get ('/faculty/profile/edit', 'FacultyController@editProfile')->name('faculty.editProfile');

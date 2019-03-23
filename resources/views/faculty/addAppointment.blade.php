@@ -1,5 +1,5 @@
 
-@extends('student.app')
+@extends('faculty.app')
 
 @push('styles')
 @endpush

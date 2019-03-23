@@ -30,7 +30,7 @@ class HomeController extends Controller
             ->join('faculties', 'appointments.f_id', '=', 'faculties.f_id')
             ->select('appointments.*','faculties.name', 'faculties.email', 'faculties.phone')
             ->where('appointments.status','=','pending')
-            ->get();
+            ->paginate(10);
 
 
         return view('student.home')->with('appointments',$appointments);

@@ -15,10 +15,12 @@
         @endif
 
         <div class="row">
+            <div class="card col-md-12">
+                <br><br>
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-header">
-                        <h5 class="card-title">Recent Appointments</h5>
+                        Recent Appointments<input type="button"  id="add-appointment" class="btn btn-primary float-md-right" value="Create Appointment"/>
                     </div>
                     <!-- /.card-header -->
                     <div class="card-body table-responsive-md p-0">
@@ -62,13 +64,20 @@
                             @endforeach
 
                         </table>
+
                     </div>
                     <!-- /.card-body -->
                 </div>
                 <!-- /.card -->
+                <br>
+                {{$appointments->links()}}
+                <br>
+            </div>
             </div>
         </div><!-- /.row -->
     </div>
+
+
 @endsection
 
 

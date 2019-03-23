@@ -23,7 +23,7 @@ class FacultyHomeController extends Controller
         $appointments = DB::table('appointments')
             ->join('students', 'appointments.s_id', '=', 'students.s_id')
             ->select('appointments.*','students.name', 'students.email', 'students.phone')
-            ->get();
+            ->paginate(10);
 
 
         return view('faculty.home')->with('appointments',$appointments);

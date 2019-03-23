@@ -10,6 +10,9 @@
     <script src="{{ asset('airdate/js/datepicker.js') }}" defer></script>
     <script src="{{ asset('mdtime/mdtimepicker.js') }}" defer></script>
 
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
     <link href="{{ URL::asset('css/styles.css') }}" rel="stylesheet" type="text/css" >
     <link rel="stylesheet" type="text/css" href="https://unpkg.com/magic-input/dist/magic-input.min.css">
 
@@ -18,19 +21,23 @@
 
 
         <br>
-        <form action="{{ route('faculty.schedule.store') }}" method="POST" autocomplete="off">
+        <form id="scheduleForm"  method="POST" autocomplete="off">
             @csrf
 
             <div class="row">
                 <div  align="center">
-                    <label>Semester:</label> Spring 2019
+                    <label>Semester:</label> {{$semester->semester}}
                 </div>
             </div>
             <br>
 
+            <input  type="hidden" id="starts_at" name="starts_at" value="{{$semester->starts_at}}" >
+            <input  type="hidden" id="starts_at" name="ends_at" value="{{$semester->ends_at}}" >
+
+
             <div class="card">
                 <div class="card-body table-responsive-md p-0">
-                    <table class="table table-striped">
+                    <table id="scheduleTable" class="table table-striped">
                         <thead>
                         <tr class="well">
                             <th scope="col">Time</th>
@@ -51,46 +58,78 @@
                             <tr>
                                 <td>{{$slot->slot}}-<?php echo date("h:i", $ends) ?></td>
 
-                                @for($i=0;$i<count($schedules);$i++)
-                                    @if($slot->slot==$schedules[$i]->slot)
-                                        @if($schedules[$i]->sat=='on')
-                                            <td><input type="checkbox" class="mgc mgc-success"  name="slots[{{$slot->slot}}][sat]" checked></td>
+                                {{--check if have schedule--}}
+                                @if(count($schedules)>0)
+                                    @for($i=0;$i<count($schedules);$i++)
+                                        {{--check slot in table and db--}}
+                                        @if($slot->slot==$schedules[$i]->slot)
+
+                                            {{--if have schedule for the slot--}}
+                                            @if($schedules[$i]->sat=='on')
+                                                <td><input type="checkbox" class="mgc mgc-success"  name="slots[{{$slot->slot}}][sat]" checked></td>
+                                            @else
+                                                <td><input type="checkbox" class="mgc mgc-success"  name="slots[{{$slot->slot}}][sat]"></td>
+                                            @endif
+                                            @if($schedules[$i]->sun=='on')
+                                                <td><input type="checkbox" class="mgc mgc-success"  name="slots[{{$slot->slot}}][sun]" checked></td>
+                                            @else
+                                                    <td><input type="checkbox" class="mgc mgc-success"  name="slots[{{$slot->slot}}][sun]"></td>
+                                            @endif
+                                            @if($schedules[$i]->mon=='on')
+                                                <td><input type="checkbox" class="mgc mgc-success"  name="slots[{{$slot->slot}}][mon]" checked></td>
+                                            @else
+                                                    <td><input type="checkbox" class="mgc mgc-success"  name="slots[{{$slot->slot}}][mon]"></td>
+                                            @endif
+                                            @if($schedules[$i]->tue=='on')
+                                                <td><input type="checkbox" class="mgc mgc-success"  name="slots[{{$slot->slot}}][tue]" checked></td>
+                                            @else
+                                                    <td><input type="checkbox" class="mgc mgc-success"  name="slots[{{$slot->slot}}][tue]"></td>
+                                            @endif
+                                            @if($schedules[$i]->wed=='on')
+                                                <td><input type="checkbox" class="mgc mgc-success"  name="slots[{{$slot->slot}}][wed]" checked></td>
+                                            @else
+                                                    <td><input type="checkbox" class="mgc mgc-success"  name="slots[{{$slot->slot}}][wed]"></td>
+                                            @endif
+                                            @if($schedules[$i]->thu=='on')
+                                                <td><input type="checkbox" class="mgc mgc-success"  name="slots[{{$slot->slot}}][thu]" checked></td>
+                                            @else
+                                                    <td><input type="checkbox" class="mgc mgc-success"  name="slots[{{$slot->slot}}][thu]"></td>
+                                            @endif
+                                            @if($schedules[$i]->fri=='on')
+                                                <td><input type="checkbox" class="mgc mgc-success"  name="slots[{{$slot->slot}}][fri]" checked></td>
+                                            @else
+                                                    <td><input type="checkbox" class="mgc mgc-success"  name="slots[{{$slot->slot}}][fri]"></td>
+                                            @endif
+
+                                            {{--get schedules and break the loop--}}
+                                            @break;
+
+                                            {{--if doesn't have schedule for the slot--}}
                                         @else
                                             <td><input type="checkbox" class="mgc mgc-success"  name="slots[{{$slot->slot}}][sat]"></td>
+                                            <td><input type="checkbox" class="mgc mgc-success"  name="slots[{{$slot->slot}}][sun]"></td>
+                                            <td><input type="checkbox" class="mgc mgc-success"  name="slots[{{$slot->slot}}][mon]"></td>
+                                            <td><input type="checkbox" class="mgc mgc-success"  name="slots[{{$slot->slot}}][tue]"></td>
+                                            <td><input type="checkbox" class="mgc mgc-success"  name="slots[{{$slot->slot}}][wed]"></td>
+                                            <td><input type="checkbox" class="mgc mgc-success"  name="slots[{{$slot->slot}}][thu]"></td>
+                                            <td><input type="checkbox" class="mgc mgc-success"  name="slots[{{$slot->slot}}][fri]"></td>
+
+                                            {{--empty row and break the loop--}}
+                                            @break;
                                         @endif
-                                        @if($schedules[$i]->sun=='on')
-                                            <td><input type="checkbox" class="mgc mgc-success"  name="slots[{{$slot->slot}}][sun]" checked></td>
-                                        @else
-                                                <td><input type="checkbox" class="mgc mgc-success"  name="slots[{{$slot->slot}}][sun]"></td>
-                                        @endif
-                                        @if($schedules[$i]->mon=='on')
-                                            <td><input type="checkbox" class="mgc mgc-success"  name="slots[{{$slot->slot}}][mon]" checked></td>
-                                        @else
-                                                <td><input type="checkbox" class="mgc mgc-success"  name="slots[{{$slot->slot}}][mon]"></td>
-                                        @endif
-                                        @if($schedules[$i]->tue=='on')
-                                            <td><input type="checkbox" class="mgc mgc-success"  name="slots[{{$slot->slot}}][tue]" checked></td>
-                                        @else
-                                                <td><input type="checkbox" class="mgc mgc-success"  name="slots[{{$slot->slot}}][tue]"></td>
-                                        @endif
-                                        @if($schedules[$i]->wed=='on')
-                                            <td><input type="checkbox" class="mgc mgc-success"  name="slots[{{$slot->slot}}][wed]" checked></td>
-                                        @else
-                                                <td><input type="checkbox" class="mgc mgc-success"  name="slots[{{$slot->slot}}][wed]"></td>
-                                        @endif
-                                        @if($schedules[$i]->thu=='on')
-                                            <td><input type="checkbox" class="mgc mgc-success"  name="slots[{{$slot->slot}}][thu]" checked></td>
-                                        @else
-                                                <td><input type="checkbox" class="mgc mgc-success"  name="slots[{{$slot->slot}}][thu]"></td>
-                                        @endif
-                                        @if($schedules[$i]->fri=='on')
-                                            <td><input type="checkbox" class="mgc mgc-success"  name="slots[{{$slot->slot}}][fri]" checked></td>
-                                        @else
-                                                <td><input type="checkbox" class="mgc mgc-success"  name="slots[{{$slot->slot}}][fri]"></td>
-                                        @endif
-                                    @else
-                                    @endif
-                                @endfor
+                                    @endfor
+
+                                    {{--if have no schedule--}}
+                                @else
+                                    <td><input type="checkbox" class="mgc mgc-success"  name="slots[{{$slot->slot}}][sat]"></td>
+                                    <td><input type="checkbox" class="mgc mgc-success"  name="slots[{{$slot->slot}}][sun]"></td>
+                                    <td><input type="checkbox" class="mgc mgc-success"  name="slots[{{$slot->slot}}][mon]"></td>
+                                    <td><input type="checkbox" class="mgc mgc-success"  name="slots[{{$slot->slot}}][tue]"></td>
+                                    <td><input type="checkbox" class="mgc mgc-success"  name="slots[{{$slot->slot}}][wed]"></td>
+                                    <td><input type="checkbox" class="mgc mgc-success"  name="slots[{{$slot->slot}}][thu]"></td>
+                                    <td><input type="checkbox" class="mgc mgc-success"  name="slots[{{$slot->slot}}][fri]"></td>
+
+                                @endif
                             </tr>
                         @endforeach
 
@@ -101,20 +140,60 @@
             <br>
 
             <div class="form-group">
-            <input class="btn btn-primary" type="submit" name="submit">
+            <input id="submit" class="btn btn-primary" type="submit" name="submit">
             </div>
         </form>
     </div>
 </div>
-        <script type="text/javascript">
+        {{--<script type="text/javascript">--}}
 
-            $('.date').datepicker({
+            {{--$('.date').datepicker({--}}
 
-                format: 'dd-mm-yyyy',
-                todayHighlight: true
+                {{--format: 'dd-mm-yyyy',--}}
+                {{--todayHighlight: true--}}
 
+            {{--});--}}
+        {{--</script>--}}
+
+    {{--submit--}}
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $('#scheduleForm').on('submit',function(event){
+
+                event.preventDefault();
+                var data=$(this).serialize();
+
+
+                $.ajax({
+                    method:'POST',
+                    url:'{{ route('faculty.schedule.store') }}',
+                    data:data,
+                    success:function(data){
+                        console.log(data);
+                        console.log(data.length);
+
+                        if (data.type==="success"){
+                            toastr.success(data.message);
+
+
+
+                        }
+                        if (data.type==="error"){
+                            toastr.error(data.message);
+                        }
+                        if (data.type==="warning"){
+                            toastr.warning(data.message);
+                        }
+
+
+                    },
+                    error:function(){
+
+                    }
+                });
             });
-        </script>
+        });
+    </script>
 
     @endsection
 

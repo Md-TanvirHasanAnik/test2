@@ -7,6 +7,7 @@ use App\TimeSlot;
 use App\Schedule;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 
 class ScheduleController extends Controller
@@ -29,6 +30,18 @@ class ScheduleController extends Controller
      */
     public function index()
     {
+
+        $current_semester=DB::table('controls')
+            ->select('current_semester')
+            ->first();
+
+
+
+      $semester=DB::table('semesters')
+            ->select('semesters.*')
+            ->where('semester','=',$current_semester->current_semester)
+            ->first();
+
         $slots=TimeSlot::all();
        // return $slots;
 
@@ -39,7 +52,8 @@ class ScheduleController extends Controller
 
 //        return $schedules;
 //        return $slots;
-        return view('faculty.schedule',compact('slots','schedules'));
+        return view('faculty.schedule',compact('semester','slots','schedules'));
+
     }
 
     /**
@@ -64,18 +78,43 @@ class ScheduleController extends Controller
        // return response()->json($request->all());
 
         try {
-            $this->validate($request, [
+            $validate=Validator::make($request->all(), [
                 'starts_at' => 'required',
                 'ends_at' => 'required',
             ]);
         } catch (ValidationException $e) {
         }
 
+        if ($validate->fails()) {
+
+//            foreach ($validate->getMessageBag()->getMessages() as $field_name=>$message){
+//                $errors=array(
+//                    'message'=>$message,
+//                    'type'=>'warning',
+//                );
+//            }
+
+            $response = array(
+                'message' => 'Required fields are missing',
+                'type' => 'warning'
+            );
+
+            return response()->json($response);
+        }
+        else {
+
+            //clear existing schedule
+        DB::table('schedules')
+            ->where('f_id', '=', Auth::user()->f_id)
+            ->where('type','=','regular')
+            ->delete();
+
 
         $sa=date("Y-m-d", strtotime($request->starts_at));
         $ea=date("Y-m-d", strtotime($request->ends_at));
-        echo $sa." ".$ea."\n";
+//        echo $sa." ".$ea."\n";
 
+            //slot and days from slots[slot][day] array of input fields
         foreach ((array)$request->slots as $slot=>$days ){
             # code...
             $a=array();
@@ -94,45 +133,52 @@ class ScheduleController extends Controller
                 $schedule->fri="off";
                 $schedule->type="regular";
 
+                //day and value from days
             foreach ((array) $days as $day=>$value){
-                $i=0;
                 $a[$day]=$value;
                 
                  $schedule->$day=$value;
-                echo "$i ".$slot." ".$day." ".$value." ".count($a);
-                echo "\n";
-                $i++;
+//                echo "$i ".$slot." ".$day." ".$value." ".count($a);
+//                echo "\n";
+
         }
 
-         $schedule->save();
-         //return $schedule;
+          $schedule->save();
       }
 
+            $response = array(
+                'message' => 'Schedule is submitted Successfully',
+                'type' => 'success'
+            );
+            return response()->json($response);
 
-      //split into timeslots
-        $starttime = '9:00';  // your start time
-        $endtime = '21:00';  // End time
-        $duration = '30';  // split by 30 mins
-         
-        $array_of_time = array ();
-        $start_time    = strtotime ($starttime); //change to strtotime
-        $end_time      = strtotime ($endtime); //change to strtotime
-         
-        $add_mins  = $duration * 60;
-         
-        while ($start_time <= $end_time) // loop between time
-        {
-           $array_of_time[] = date ("h:i", $start_time);
-           $start_time += $add_mins; // to check endtie=me
-        }
+   }
 
 
-       // echo '<pre>';
-      //  print_r($array_of_time);
-       // echo '</pre>';
-        //end splitting
-
-//        return $schedule;
+        //split into timeslots
+//        $starttime = '9:00';  // your start time
+//        $endtime = '21:00';  // End time
+//        $duration = '30';  // split by 30 mins
+//
+//        $array_of_time = array ();
+//        $start_time    = strtotime ($starttime); //change to strtotime
+//        $end_time      = strtotime ($endtime); //change to strtotime
+//
+//        $add_mins  = $duration * 60;
+//
+//        while ($start_time <= $end_time) // loop between time
+//        {
+//           $array_of_time[] = date ("h:i", $start_time);
+//           $start_time += $add_mins; // to check endtie=me
+//        }
+//
+//
+//       // echo '<pre>';
+//      //  print_r($array_of_time);
+//       // echo '</pre>';
+//        //end splitting
+//
+////        return $schedule;
 }
 
     /**
