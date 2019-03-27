@@ -1,4 +1,4 @@
-@extends ('student.app')
+@extends ('faculty.app')
 
 @section('content')
 
@@ -26,11 +26,7 @@
 
                 </div>
             </div>
-            @if(Session::get('visitor')!='guest')
-            <div class="col-md-2">
-                <button id="edit-btn" class="profile-edit-btn" >Edit Profile</button>
-            </div>
-            @endif
+
         </div>
         <div class="row">
             <div class="col-md-4">

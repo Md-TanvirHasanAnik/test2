@@ -31,17 +31,19 @@ class AjaxDataController extends Controller
 
     public function studentAppointments()
     {
-
+        //for table ajax data in appointments
         $appointments = DB::table('appointments')
             ->join('faculties', 'appointments.f_id', '=', 'faculties.f_id')
             ->select('appointments.*','faculties.name', 'faculties.email', 'faculties.phone')
-            ->paginate(10);
+            ->get();
 
         try {
             return DataTables::of($appointments)->make(true);
         } catch (\Exception $e) {
         }
     }
+
+
 
     public function findFaculty(Request $request){
 
@@ -58,7 +60,7 @@ class AjaxDataController extends Controller
         $day=date("D", strtotime($date));
         $day=strtolower($day);
 
-
+//        return $f_id." ".$date." ".$day;
 //        $schedule=null;
 //        $schedule=DB::table('schedules')
 //            ->select('starts_at','ends_at')->distinct()
@@ -69,7 +71,7 @@ class AjaxDataController extends Controller
 //
 //        $starts=$schedule['starts_at'];
 //        $ends=$schedule['ends_at'];
-////      return $f_id." ".$date." ".$day." ".$schedule." ".$starts." ".$ends."\n";
+//      return $f_id." ".$date." ".$day." ".$schedule." ".$starts." ".$ends."\n";
 
         //$request->id here is the id of our chosen option id
         $data = DB::table('schedules')->
@@ -105,7 +107,4 @@ class AjaxDataController extends Controller
         return response()->json($data);//then sent this data to ajax success
 
     }
-
-
-
 }

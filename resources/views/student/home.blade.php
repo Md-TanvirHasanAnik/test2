@@ -18,7 +18,7 @@
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-header">
-                        <h5 class="card-title">Recent Appointments</h5>
+                        <h5 class="card-title">Upcoming Appointments</h5>
                     </div>
                     <!-- /.card-header -->
                     <div class="card-body table-responsive-md p-0">
@@ -36,7 +36,7 @@
                                     </td>
                                     <td class="text-muted">
                                         <i class="far fa-calendar"></i>{{$appointment->date}}<br>
-                                        <i class="far fa-clock"></i>{{$appointment->starts_at}} - {{$appointment->ends_at}}
+                                        <i class="far fa-clock"></i>{{date("h:i A",strtotime($appointment->starts_at))}} - {{date("h:i A",strtotime($appointment->ends_at))}}
                                     </td>
                                     <td class="td-message">
                                         <p>{{$appointment->message}}</p>
@@ -45,6 +45,8 @@
                                         @if($appointment->status=='completed')
                                             <span class="text-uppercase small border border-success text-success badge-pill">{{$appointment->status}}</span>
                                         @elseif($appointment->status=='cancelled')
+                                            <span class="text-uppercase small border border-danger text-danger badge-pill">{{$appointment->status}}</span>
+                                        @elseif($appointment->status=='deleted')
                                             <span class="text-uppercase small border border-danger text-danger badge-pill">{{$appointment->status}}</span>
                                         @elseif($appointment->status=='pending')
                                             <span class="text-uppercase small border border-warning text-warning badge-pill">{{$appointment->status}}</span>
@@ -63,6 +65,7 @@
                 </div>
                 <!-- /.card -->
             </div>
+                <br><br>
             </div>
         </div><!-- /.row -->
     </div>

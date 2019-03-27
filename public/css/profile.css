@@ -97,6 +97,11 @@ input {
     font-weight: 600;
     font-size: 14px;
 }
+.profile-work ul li{
+    color: #495057;
+    font-weight: 600;
+    font-size: 14px;
+}
 .profile-work ul{
     list-style: none;
 }

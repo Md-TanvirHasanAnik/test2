@@ -39,26 +39,38 @@ Route::get('/schedules', 'ScheduleController@index')->name('faculty.schedule');
 Route::post('/schedules/store', 'ScheduleController@store')->name('faculty.schedule.store');
 
 Route::get('/appointments/add', 'AppointmentController@appointmentForm')->name('appointment.add');
-Route::get('/ajax/findFaculty', 'AjaxDataController@findFaculty')->name('appointment.findFaculty');
-Route::get('/ajax/searchFaculty', 'AjaxDataController@searchFaculty')->name('appointment.searchFaculty');
-Route::get('/ajax/findSlots', 'AjaxDataController@findSlots')->name('appointment.findSlots');
+Route::get ('/appointments/edit', 'AppointmentController@edit')->name('appointment.edit');
 Route::post('/appointments/store', 'AppointmentController@store')->name('appointment.store');
-Route::get('/ajax/findAppointments', 'AjaxDataController@findAppointments')->name('appointment.findAppointments');
-Route::get ('/ajax/cancelFromStudent', 'AppointmentController@cancel')->name('appointment.cancel');
-Route::get ('/ajax/deleteFromStudent', 'AppointmentController@delete')->name('appointment.delete');
-Route::get ('ajax/studentAppointments', 'AjaxDataController@studentAppointments')->name('ajax.studentAppointments');
+Route::get ('/appointments/delete', 'AppointmentController@delete')->name('appointment.delete');
+Route::get ('/appointments/cancel', 'AppointmentController@cancel')->name('appointment.cancel');
+Route::post ('/appointments/update', 'AppointmentController@update')->name('appointment.update');
 
-Route::get ('/students/{id}', 'StudentController@showInfo')->name('student.info');
-Route::get ('/faculties/{id}', 'FacultyController@showInfo')->name('faculty.info');
+Route::get('/ajax/findFaculty', 'AjaxDataController@findFaculty')->name('ajax.findFaculty');
+Route::get('/ajax/searchFaculty', 'AjaxDataController@searchFaculty')->name('ajax.searchFaculty');
+Route::get('/ajax/findSlots', 'AjaxDataController@findSlots')->name('ajax.findSlots');
+Route::get('/ajax/findAppointments', 'AjaxDataController@findAppointments')->name('ajax.findAppointments');
+Route::get ('/ajax/studentAppointments', 'AjaxDataController@studentAppointments')->name('ajax.studentAppointments');
+
+Route::get ('/faculties/{id}', 'StudentController@viewFacultyInfo')->name('student.facultyInfo');
+Route::get ('/students/{id}', 'FacultyController@viewStudentInfo')->name('faculty.studentInfo');
 
 
 Route::get ('/appointments', 'AppointmentController@index')->name('student.appointments');
 Route::get ('/faculties', 'StudentController@faculties')->name('student.faculties');
 Route::get ('/profile', 'StudentController@profile')->name('student.profile');
-Route::get ('/profile/edit', 'StudentController@editProfile')->name('student.editProfile');
+Route::get ('/profile/edit', 'StudentController@editProfileForm')->name('student.editProfileForm');
+Route::post ('/profile/edit', 'StudentController@editProfile')->name('student.editProfile');
 
 
 //Route::get ('/faculty/schedules', 'FacultyController@schedules')->name('faculty.schedule');
 Route::get ('/faculty/profile', 'FacultyController@profile')->name('faculty.profile');
-Route::get ('/faculty/appointments', 'AppointmentFacultyController@index')->name('faculty.appointments');
-Route::get ('/faculty/profile/edit', 'FacultyController@editProfile')->name('faculty.editProfile');
+Route::get ('/faculty/appointments', 'FacultyAppointmentController@index')->name('faculty.appointments');
+Route::get ('/faculty/profile/edit', 'FacultyController@editProfileForm')->name('faculty.editProfileForm');
+Route::post ('/faculty/profile/edit', 'FacultyController@editProfile')->name('faculty.editProfile');
+
+Route::get('/faculty/appointments/add', 'FacultyAppointmentController@appointmentForm')->name('facultyAppointment.add');
+Route::get ('/faculty/appointments/edit', 'FacultyAppointmentController@edit')->name('facultyAppointment.edit');
+Route::post('/faculty/appointments/store', 'FacultyAppointmentController@store')->name('facultyAppointment.store');
+Route::get ('/faculty/appointments/delete', 'FacultyAppointmentController@delete')->name('facultyAppointment.delete');
+Route::get ('/faculty/appointments/cancel', 'FacultyAppointmentController@cancel')->name('facultyAppointment.cancel');
+Route::post ('/faculty/appointments/update', 'FacultyAppointmentController@update')->name('facultyAppointment.update');

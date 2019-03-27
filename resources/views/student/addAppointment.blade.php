@@ -22,7 +22,9 @@
 
     <div class="container ">
     <div class="row ">
-        <div class="col-md-10">
+        <div class="card col-md-12">
+            <br>
+            <br>
 
             {{--<div class="col-md-6 " style="float:right;">--}}
                 {{--<label>Search Faculty</label>--}}
@@ -80,18 +82,17 @@
 
                                     </select>
 
-
                                     <p class="help-block" id="available_days"></p>
                                 </div>
 
                                 <div class="form-group">
                                     <label>Appointment Date <i class="text-danger">*</i></label>
                                     <div  class="input-group" >
-                                        <input  type="text" id="datepicker" name="date" class="form-control"   placeholder="dd/mm/yyyy">
+                                        <input  type="text" id="datepicker" name="date" class="form-control"   placeholder="yyyy-mm-dd">
                                         {{--<input  type="text" id="datepicker" data-provide="datepicker" name="date" class="form-control datepicker" data-date-autoclose="true" data-date-format="dd/mm/yyyy" value=""  placeholder="dd-mm-yyyy">--}}
-                                        <div class="input-group-addon">
-                                            <i class="far fa-calendar-alt"></i>
-                                            <span class="glyphicon glyphicon-th"></span>
+                                        <div class="input-group-append">
+                                            <i class="input-group-text far fa-calendar-alt"></i>
+                                            {{--<span class="input-group-text glyphicon glyphicon-calendar" aria-hidden="true"></span>--}}
                                         </div>
                                     </div>
                                 </div>
@@ -103,37 +104,33 @@
                                     </select>
                                     <p style="padding-left: 8px" class="help-block" id="available_slots"></p>
                                 </div>
-
                                 <div id="appointments-taken"></div>
 
-                                <div class=" col-md-6" style="float: left">
+                                <div style="margin:0 -15px 0 -15px">
+                                <div class="col-md-6" style="float: left">
                                 <div class="form-group">
                                     <label>Starting Time<i class="text-danger">*</i></label>
-                                   <div class="input-group">
-                                       <div id="start_time_div">
+                                   <div class="input-group" id="start_time_div">
                                     <input name="starts_at" autocomplete="off" type="text" class="form-control" id="starts_at" placeholder="Time" >
-                                       </div>
-                                    <div class="input-group-addon">
-                                        <span><i class="far fa-clock"></i></span>
-                                    </div>
+                                           <div class="input-group-append">
+                                               <i class="input-group-text far fa-clock"></i>
+                                           </div>
                                    </div>
                                 </div>
                                 </div>
 
-                                <div class=" col-md-6 " style="float: right">
+                                <div class="col-md-6"  style="float: right">
                                 <div class="form-group">
                                     <label>Ending Time<i class="text-danger">*</i></label>
-                                    <div class="input-group">
-                                        <div id="end_time_div">
+                                    <div class="input-group" id="end_time_div">
                                         <input name="ends_at" autocomplete="off" type="text" class="form-control" id="ends_at" placeholder="Time" >
-                                        </div>
-                                            <div class="input-group-addon">
-                                            <span><i class="far fa-clock"></i></span>
+                                        <div class="input-group-append">
+                                            <i class="input-group-text far fa-clock"></i>
                                         </div>
                                     </div>
                                 </div>
                                 </div>
-
+                                </div>
 
                                 <div class="form-group">
                                     <label>Problem </label>
@@ -152,6 +149,8 @@
                     </div>
                 </div>
         </div>
+            <br>
+            <br>
     </div>
 </div>
     </div>
@@ -168,7 +167,7 @@
 
             $.ajax({
                 type:'get',
-                url:'{{route('appointment.findFaculty')}}',
+                url:'{{route('ajax.findFaculty')}}',
                 data:{'dept':dept},
                 success:function(data){
                     console.log(data);
@@ -217,7 +216,7 @@
     $(document).ready(function(){
         //air datepicker
         $( '#datepicker' ).datepicker({
-            dateFormat: 'yyyy/mm/dd',
+            dateFormat: 'yyyy-mm-dd',
             autoClose:'true',
             onSelect: function() {
                  date=$('#datepicker').val();
@@ -225,7 +224,7 @@
 
                 $.ajax({
                     type:'get',
-                    url:'{{route('appointment.findSlots')}}',
+                    url:'{{route('ajax.findSlots')}}',
                     data:{'f_id':facultyId,'date':date},
                     success:function(data){
                         console.log(data);
@@ -272,7 +271,7 @@
 
                 $.ajax({
                     type:'get',
-                    url:'{{route('appointment.findAppointments')}}',
+                    url:'{{route('ajax.findAppointments')}}',
                     data:{'f_id':facultyId,'date':date,'slot':slot},
                     success:function(data){
                         console.log(data);
@@ -400,7 +399,7 @@
             {
                 // var _token = $('input[name="_token"]').val();
                 $.ajax({
-                    url:"{{ route('appointment.searchFaculty') }}",
+                    url:"{{ route('ajax.searchFaculty') }}",
                     type:'get',
                     data:{query:query},
                     // data:{query:query, _token:_token},
@@ -439,3 +438,4 @@
 
 @endsection
 
+                                 

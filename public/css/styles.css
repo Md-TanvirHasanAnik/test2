@@ -1,8 +1,10 @@
 
-td,th{
+td,th,.center{
 	text-align: left;
     vertical-align: inherit !important;
 }
+
+.datepicker{ z-index:1200 !important; }
 
 .body-box{
     padding: 3%;
@@ -145,6 +147,8 @@ a {
     content: "\F1D8";
 }
 
-
 /*appointment table*/
 
+/*facultyMembers*/
+
+/*FacultyMembers*/

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class HomeController extends Controller
@@ -30,6 +31,7 @@ class HomeController extends Controller
             ->join('faculties', 'appointments.f_id', '=', 'faculties.f_id')
             ->select('appointments.*','faculties.name', 'faculties.email', 'faculties.phone')
             ->where('appointments.status','=','pending')
+            ->where('appointments.f_id','=',Auth::user()->s_id)
             ->paginate(10);
 
 

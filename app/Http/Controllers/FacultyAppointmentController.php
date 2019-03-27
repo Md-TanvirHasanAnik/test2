@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
-class AppointmentFacultyController extends Controller
+class FacultyAppointmentController extends Controller
 {
 
 
@@ -41,63 +41,22 @@ class AppointmentFacultyController extends Controller
         $appointments = DB::table('appointments')
             ->join('students', 'appointments.s_id', '=', 'students.s_id')
             ->select('appointments.*','students.name', 'students.email', 'students.phone')
+            ->where('appointments.f_id','=',Auth::user()->f_id)
+            ->where('appointments.status','!=','deleted')
             ->paginate(10);
 
         return view('faculty.appointments')->with('appointments',$appointments);
     }
 
-    public function findSlots(Request $request){
-        $f_id=$request->f_id;
-        $date=$request->date;
-//        $date=date("Y-m-d", strtotime($request->get('date')));
-        $day=date("D", strtotime($date));
-        $day=strtolower($day);
+    public function appointmentForm()
+    {
+        $faculties=DB::table('faculties')
+        ->where('f_id','=',Auth::user()->f_id)
+        ->get();//get data from table
 
+        $faculty=$faculties[0];
 
-//        $schedule=null;
-//        $schedule=DB::table('schedules')
-//            ->select('starts_at','ends_at')->distinct()
-//            ->where('f_id',$f_id)
-//            ->where('starts_at','<=',$date)
-//            ->where('ends_at','>=',$date)
-//            ->first();
-//
-//        $starts=$schedule['starts_at'];
-//        $ends=$schedule['ends_at'];
-////      return $f_id." ".$date." ".$day." ".$schedule." ".$starts." ".$ends."\n";
-
-        //$request->id here is the id of our chosen option id
-        $data = DB::table('schedules')->
-        select('slot', 'f_id')->
-        where('f_id', $f_id)->where('starts_at','<=',$date)->
-        where('ends_at','>=',$date)->where($day, '=', 'on')->get();
-
-
-        // $data["msg"]="No slots available";
-//            $data["date"]=$date;
-
-        return response()->json($data);//then sent this data to ajax success
-
-    }
-
-    public function findAppointments(Request $request){
-        $f_id=$request->f_id;
-        $date=$request->date;
-        $slot=$request->slot;
-
-        //$request->id here is the id of our chosen option id
-        $data = Appointment::select('starts_at', 'ends_at')->
-        where('f_id', $f_id)->where('date',$date)->where('slot',$slot)->get();
-
-
-        return response()->json($data);//then sent this data to ajax success
-
-    }
-
-    public function searchFaculty(Request $request){
-        //$request->id here is the id of our chosen option id
-        $data = Faculty::select('name','f_id','dept')->where("name","LIKE","%{$request->get('query')}%")->get();
-        return response()->json($data);//then sent this data to ajax success
+        return view('faculty.addAppointment')->with('faculty',$faculty);
 
     }
 
@@ -123,7 +82,7 @@ class AppointmentFacultyController extends Controller
     {
         try {
             $validate=Validator::make($request->all(), [
-                'faculty' => 'required',
+                's_id' => 'required',
                 'date' => 'required',
                 'starts_at' => 'required',
                 'ends_at' => 'required',
@@ -149,8 +108,8 @@ class AppointmentFacultyController extends Controller
             return response()->json($response);
         }
         else {
-            $starts = Carbon::createFromFormat('H:i a', $request->starts_at)->toTimeString();
-            $ends = Carbon::createFromFormat('H:i a', $request->ends_at)->toTimeString();
+            $starts = Carbon::createFromFormat('h:i a', $request->starts_at)->toTimeString();
+            $ends = Carbon::createFromFormat('h:i a', $request->ends_at)->toTimeString();
 
             //check if the any appointment available
             $isAvailable = Appointment::select('id')->
@@ -159,14 +118,15 @@ class AppointmentFacultyController extends Controller
 
             if (empty($isAvailable)) {
                 $appointment = new Appointment();
-                $appointment->s_id = Auth::user()->s_id;
-                $appointment->f_id = $request->faculty;
+                $appointment->f_id = Auth::user()->f_id;
+                $appointment->s_id = trim($request->s_id);
                 $appointment->date = $request->date;
                 $appointment->slot = $request->slot;
                 $appointment->starts_at = $starts;
                 $appointment->ends_at = $ends;
-                $appointment->status = "Pending";
+                $appointment->status = "pending";
                 $appointment->message = $request->message;
+                $appointment->updated_by =Auth::user()->f_id;
 
                 $appointment->save();
 
@@ -186,6 +146,66 @@ class AppointmentFacultyController extends Controller
         }
     }
 
+
+    public function cancel(Request $request)
+    {
+
+        //check if the any appointment available
+        $appointment = Appointment::find($request->id);
+
+
+        if (!empty($appointment)) {
+
+            $appointment->status = "cancelled";
+            $appointment->updated_by =Auth::user()->f_id;
+            $appointment->save();
+
+            $response = array(
+                'message' => 'Appointment is Cancelled Successfully',
+                'type' => 'success'
+            );
+            return response()->json($response);
+        } else {
+            $response = array(
+                'message' => 'Something error happened.',
+                'type' => 'error'
+            );
+
+            return response()->json($response);
+        }
+
+    }
+
+    public function delete(Request $request)
+    {
+
+        //check if the any appointment available
+
+        $appointment=Appointment::find($request->id);
+//        $appointment->delete();
+
+        if (!empty($appointment)) {
+
+            $appointment->status = "deleted";
+            $appointment->updated_by =Auth::user()->f_id;
+            $appointment->save();
+
+            $response = array(
+                'message' => 'Appointment is Deleted Successfully',
+                'type' => 'success'
+            );
+            return response()->json($response);
+        } else {
+            $response = array(
+                'message' => 'Something error happened.',
+                'type' => 'error'
+            );
+
+            return response()->json($response);
+        }
+
+    }
+
     /**
      * Display the specified resource.
      *
@@ -200,12 +220,22 @@ class AppointmentFacultyController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param Request $request
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Request $request)
     {
         //
+        //$request->id here is the id of our chosen option id
+        $data = Appointment::select('*')->
+        where('id', $request->id)->get();
+
+
+        $data[0]->starts_at=date("h:i A",strtotime($data[0]->starts_at));
+        $data[0]->ends_at=date("h:i A",strtotime($data[0]->ends_at));
+
+
+        return response()->json($data);//then sent this data to ajax success
     }
 
     /**
@@ -215,9 +245,37 @@ class AppointmentFacultyController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
         //
+        //check if the any appointment available
+        $appointment = Appointment::find($request->id);
+
+
+        if (!empty($appointment)) {
+
+            $appointment->date = $request->date;
+            $appointment->slot = $request->slot;
+            $appointment->starts_at = $request->starts_at;
+            $appointment->ends_at = $request->ends_at;
+            $appointment->message = $request->message;
+            $appointment->updated_by =Auth::user()->f_id;
+            $appointment->save();
+
+            $response = array(
+                'message' => 'Appointment is updated Successfully',
+                'type' => 'success'
+            );
+            return response()->json($response);
+        } else {
+            $response = array(
+                'message' => 'Something error happened.',
+                'type' => 'error'
+            );
+
+            return response()->json($response);
+        }
+
     }
 
     /**

@@ -17,11 +17,13 @@ class CreateFacultiesTable extends Migration
             $table->increments('id');
             $table->string('f_id');
             $table->string('name');
-            $table->string('dept');
+            $table->string('department');
+            $table->string('faculty');
             $table->string('designation');
             $table->string('phone');
             $table->binary('photo')->nullable();
             $table->string('email')->unique();
+            $table->string('bio');
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->rememberToken();

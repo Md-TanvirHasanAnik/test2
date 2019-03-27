@@ -103,15 +103,18 @@ class ScheduleController extends Controller
         }
         else {
 
+            $type=$request->type;
+
             //clear existing schedule
         DB::table('schedules')
             ->where('f_id', '=', Auth::user()->f_id)
-            ->where('type','=','regular')
+            ->where('type','=',$type)
             ->delete();
 
 
         $sa=date("Y-m-d", strtotime($request->starts_at));
         $ea=date("Y-m-d", strtotime($request->ends_at));
+
 //        echo $sa." ".$ea."\n";
 
             //slot and days from slots[slot][day] array of input fields
@@ -131,7 +134,7 @@ class ScheduleController extends Controller
                 $schedule->wed="off";
                 $schedule->thu="off";
                 $schedule->fri="off";
-                $schedule->type="regular";
+                $schedule->type=$type;
 
                 //day and value from days
             foreach ((array) $days as $day=>$value){

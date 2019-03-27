@@ -1,9 +1,10 @@
 <?php
 
+use App\Student;
 use Illuminate\Database\Seeder;
 use App\User;
 
-class StudentsSeeder extends Seeder
+class StudentSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -13,13 +14,14 @@ class StudentsSeeder extends Seeder
     public function run()
     {
         //
-        $user=new User();
-        $user->s_id="1";
-        $user->name="User 1";
+        $user=new Student();
+        $user->s_id="152-15-556";
+        $user->name="Ahad Kabir";
         $user->department="CSE";
-        $user->email="a@a.com";
+        $user->email="ahad@student.com";
         $user->password=crypt("123456","");
         $user->phone="01234567890";
+        $user->photo="/images/default.jpg";
         $user->save();
     }
 }

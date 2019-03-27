@@ -14,13 +14,15 @@ class FacultySeeder extends Seeder
     {
         //
         $faculty=new Faculty();
-        $faculty->f_id="11";
-        $faculty->name="Faculty 1";
-        $faculty->dept="CSE";
+        $faculty->f_id="1002";
+        $faculty->name="Md Reduanul Haque";
+        $faculty->department="CSE";
+        $faculty->faculty="FSIT";
         $faculty->designation="Lecturer";
-        $faculty->email="b@b.com";
+        $faculty->email="r@faculty.com";
         $faculty->password=crypt("123456","");
         $faculty->phone="01234567890";
+        $faculty->photo="/images/default.jpg";
         $faculty->save();
     }
 }

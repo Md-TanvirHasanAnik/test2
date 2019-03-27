@@ -16,6 +16,7 @@ class CreateControlsTable extends Migration
         Schema::create('controls', function (Blueprint $table) {
             $table->increments('id');
             $table->string('current_semester');
+            $table->string('schedule_type');
             $table->timestamps();
         });
     }

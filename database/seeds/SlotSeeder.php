@@ -3,7 +3,7 @@
 use App\TimeSlot;
 use Illuminate\Database\Seeder;
 
-class SlotsSeeder extends Seeder
+class SlotSeeder extends Seeder
 {
     /**
      * Run the database seeds.

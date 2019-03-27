@@ -56,56 +56,61 @@
 
                             <?php $ends = strtotime($slot->slot)+(90*60); ?>
                             <tr>
-                                <td>{{$slot->slot}}-<?php echo date("h:i", $ends) ?></td>
+                                <td>
+                                    {{$slot->slot}}-<?php echo date("h:i", $ends) ?>
+                                    <input type="hidden" name="type" value="regular" id="type">
+                                </td>
 
                                 {{--check if have schedule--}}
                                 @if(count($schedules)>0)
-                                    @for($i=0;$i<count($schedules);$i++)
-                                        {{--check slot in table and db--}}
-                                        @if($slot->slot==$schedules[$i]->slot)
+                                    @foreach($schedules as $schedule)
+                                        @if($slot->slot==$schedule->slot)
 
                                             {{--if have schedule for the slot--}}
-                                            @if($schedules[$i]->sat=='on')
+                                            @if($schedule->sat=='on')
                                                 <td><input type="checkbox" class="mgc mgc-success"  name="slots[{{$slot->slot}}][sat]" checked></td>
                                             @else
                                                 <td><input type="checkbox" class="mgc mgc-success"  name="slots[{{$slot->slot}}][sat]"></td>
                                             @endif
-                                            @if($schedules[$i]->sun=='on')
+                                            @if($schedule->sun=='on')
                                                 <td><input type="checkbox" class="mgc mgc-success"  name="slots[{{$slot->slot}}][sun]" checked></td>
                                             @else
                                                     <td><input type="checkbox" class="mgc mgc-success"  name="slots[{{$slot->slot}}][sun]"></td>
                                             @endif
-                                            @if($schedules[$i]->mon=='on')
+                                            @if($schedule->mon=='on')
                                                 <td><input type="checkbox" class="mgc mgc-success"  name="slots[{{$slot->slot}}][mon]" checked></td>
                                             @else
                                                     <td><input type="checkbox" class="mgc mgc-success"  name="slots[{{$slot->slot}}][mon]"></td>
                                             @endif
-                                            @if($schedules[$i]->tue=='on')
+                                            @if($schedule->tue=='on')
                                                 <td><input type="checkbox" class="mgc mgc-success"  name="slots[{{$slot->slot}}][tue]" checked></td>
                                             @else
                                                     <td><input type="checkbox" class="mgc mgc-success"  name="slots[{{$slot->slot}}][tue]"></td>
                                             @endif
-                                            @if($schedules[$i]->wed=='on')
+                                            @if($schedule->wed=='on')
                                                 <td><input type="checkbox" class="mgc mgc-success"  name="slots[{{$slot->slot}}][wed]" checked></td>
                                             @else
                                                     <td><input type="checkbox" class="mgc mgc-success"  name="slots[{{$slot->slot}}][wed]"></td>
                                             @endif
-                                            @if($schedules[$i]->thu=='on')
+                                            @if($schedule->thu=='on')
                                                 <td><input type="checkbox" class="mgc mgc-success"  name="slots[{{$slot->slot}}][thu]" checked></td>
                                             @else
                                                     <td><input type="checkbox" class="mgc mgc-success"  name="slots[{{$slot->slot}}][thu]"></td>
                                             @endif
-                                            @if($schedules[$i]->fri=='on')
+                                            @if($schedule->fri=='on')
                                                 <td><input type="checkbox" class="mgc mgc-success"  name="slots[{{$slot->slot}}][fri]" checked></td>
                                             @else
                                                     <td><input type="checkbox" class="mgc mgc-success"  name="slots[{{$slot->slot}}][fri]"></td>
                                             @endif
 
-                                            {{--get schedules and break the loop--}}
-                                            @break;
 
-                                            {{--if doesn't have schedule for the slot--}}
-                                        @else
+                                            {{--and break the loop--}}
+                                            @break
+                                        @endif
+
+                                    @endforeach
+                                        {{--if doesn't have schedule for the slot--}}
+                                        @if(!in_array($slot->slot,(array)$schedule))
                                             <td><input type="checkbox" class="mgc mgc-success"  name="slots[{{$slot->slot}}][sat]"></td>
                                             <td><input type="checkbox" class="mgc mgc-success"  name="slots[{{$slot->slot}}][sun]"></td>
                                             <td><input type="checkbox" class="mgc mgc-success"  name="slots[{{$slot->slot}}][mon]"></td>
@@ -113,11 +118,8 @@
                                             <td><input type="checkbox" class="mgc mgc-success"  name="slots[{{$slot->slot}}][wed]"></td>
                                             <td><input type="checkbox" class="mgc mgc-success"  name="slots[{{$slot->slot}}][thu]"></td>
                                             <td><input type="checkbox" class="mgc mgc-success"  name="slots[{{$slot->slot}}][fri]"></td>
-
-                                            {{--empty row and break the loop--}}
-                                            @break;
                                         @endif
-                                    @endfor
+
 
                                     {{--if have no schedule--}}
                                 @else
@@ -128,7 +130,6 @@
                                     <td><input type="checkbox" class="mgc mgc-success"  name="slots[{{$slot->slot}}][wed]"></td>
                                     <td><input type="checkbox" class="mgc mgc-success"  name="slots[{{$slot->slot}}][thu]"></td>
                                     <td><input type="checkbox" class="mgc mgc-success"  name="slots[{{$slot->slot}}][fri]"></td>
-
                                 @endif
                             </tr>
                         @endforeach
