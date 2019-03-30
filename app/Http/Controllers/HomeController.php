@@ -29,9 +29,9 @@ class HomeController extends Controller
 
         $appointments = DB::table('appointments')
             ->join('faculties', 'appointments.f_id', '=', 'faculties.f_id')
-            ->select('appointments.*','faculties.name', 'faculties.email', 'faculties.phone')
+            ->select('appointments.*','faculties.name', 'faculties.email','faculties.photo', 'faculties.phone')
             ->where('appointments.status','=','pending')
-            ->where('appointments.f_id','=',Auth::user()->s_id)
+            ->where('appointments.s_id','=',Auth::user()->s_id)
             ->paginate(10);
 
 

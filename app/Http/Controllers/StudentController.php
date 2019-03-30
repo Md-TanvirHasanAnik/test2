@@ -34,7 +34,7 @@ class StudentController extends Controller
 
         $appointments = DB::table('appointments')
             ->join('faculties', 'appointments.f_id', '=', 'faculties.f_id')
-            ->select('appointments.*','faculties.name', 'faculties.email', 'faculties.phone')
+            ->select('appointments.*','faculties.name', 'faculties.email','faculties.photo', 'faculties.phone')
             ->paginate(10);
 
 
@@ -64,6 +64,7 @@ class StudentController extends Controller
         {
             $validation = Validator::make($request->all(), [
                 'image' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
+                's_id' => 'required',
                 'name' => 'required',
                 'department' => 'required',
                 'phone' => 'required',

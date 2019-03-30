@@ -60,7 +60,7 @@
                 <div class="form-group">
                     <label class="col-lg-3 control-label">Student ID</label>
                     <div class="col-lg-8">
-                        <input class="form-control" type="text" name="s_id" value="{{$student->s_id}}" disabled>
+                        <input class="form-control" type="text" name="s_id" value="{{$student->s_id}}">
                     </div>
                 </div>
                 <div class="form-group">
@@ -76,6 +76,21 @@
                         <input class="form-control" type="text" name="department" value="{{$student->department}}">
                     </div>
                 </div>
+
+            <div class="form-group">
+                <label class="col-lg-3 control-label">Level-Term</label>
+                <div class="col-lg-8">
+                    <input class="form-control" type="text" name="level_term" value="{{$student->level_term}}">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-lg-3 control-label">Campus</label>
+                <div class="col-lg-8">
+                    <input class="form-control" type="text" name="campus" value="{{$student->campus}}">
+                </div>
+            </div>
+
                 <div class="form-group">
                     <label class="col-lg-3 control-label">Email</label>
                     <div class="col-lg-8">

@@ -15,7 +15,7 @@ class CreateFacultiesTable extends Migration
     {
         Schema::create('faculties', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('f_id');
+            $table->string('f_id')->primary();
             $table->string('name');
             $table->string('department');
             $table->string('faculty');

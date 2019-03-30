@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Student;
 use App\User;
 use App\Http\Controllers\Controller;
 use Illuminate\Auth\Events\Registered;
@@ -52,10 +53,12 @@ class RegisterController extends Controller
     {
         return Validator::make($data, [
             'name' => ['required', 'string', 'max:255'],
-            's_id' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            's_id' => ['required', 'string', 'max:255','unique:students'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:students','regex:/(.*)diu\.edu\.bd$/i'],
             'phone' => ['required', 'string', 'max:255'],
             'department' => ['required', 'string', 'max:255'],
+            'campus' => ['required'],
+            'level_term' => ['required'],
             'photo' => ['string', 'max:255'],
             'password' => ['required', 'string', 'min:6', 'confirmed'],
         ]);
@@ -69,12 +72,15 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-        return User::create([
+
+        return Student::create([
             'name' => $data['name'],
             's_id' => $data['s_id'],
             'email' => $data['email'],
             'phone' => $data['phone'],
             'department' => $data['department'],
+            'campus' => $data['campus'],
+            'level_term' => $data['level_term'],
             'photo' => '/images/default.jpg',
             'password' => Hash::make($data['password']),
         ]);

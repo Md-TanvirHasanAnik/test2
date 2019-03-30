@@ -19,6 +19,8 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 
+    {{--for time format--}}
+    <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.17.1/moment.min.js"></script>
 
     <div class="container ">
         <div class="row ">
@@ -148,6 +150,7 @@
             $( '#datepicker' ).datepicker({
                 dateFormat: 'yyyy-mm-dd',
                 autoClose:'true',
+                minDate: new Date(),
                 onSelect: function() {
                     date=$('#datepicker').val();
                     console.log(date);
@@ -173,7 +176,12 @@
 
                             // Loop through each of the results and append the option to the dropdown
                             for(var i=0;i<data.length;i++){
-                                op+='<option value="'+data[i].slot+'">'+data[i].slot+'</option>';
+                                //get the minutes to add from class/slot duration
+                                var slotInMillis=moment(data[i].slot,'hh:mm A').add(90,'m');
+                                var slotTo=moment(slotInMillis).format('hh:mm A');
+                                console.log(slotTo);
+
+                                op+='<option value="'+data[i].slot+'">'+data[i].slot+' - '+slotTo+'</option>';
                             }
                             //// Remove current options
                             $('#slot').html(" ");
@@ -208,13 +216,27 @@
                         console.log(data);
                         console.log(data.length);
 
+                        //get the minutes to add from class/slot duration
+                        var slotInMillis=moment(slot,'hh:mm A').add(90,'m');
+                        slotTo=moment(slotInMillis).format('hh:mm A');
+                        console.log(slotTo);
+
                         if (data.length>0) {
                             // Add the empty option with the empty message
-                            var  p='<p>Appointments taken at '+slot+'</p>';
+
+                            // var hour=slot.split(":")[0];
+                            // var minuteWithAmPm=slot.split(":")[1];
+                            // var minute=minuteWithAmPm.split(" ")[0];
+                            // var tempDate = new Date();
+                            // tempDate.setHours(hour,minute,0);
+                            // tempDate.setMinutes(tempDate.getMinutes() + 90);
+                            // var slotTo=tempDate.getHours()+":"+tempDate.getMinutes();
+
+                            var  p='<p>Appointments taken at slot '+slot+' - '+slotTo+'</p>';
 
                             // Loop through each of the results and append the option to the dropdown
                             for(var i=0;i<data.length;i++){
-                                p+='<li>'+data[i].starts_at+' - '+data[i].ends_at+'</li>';
+                                p+='<li>'+moment(data[i].starts_at,'hh:m:ss').format('hh:mm A')+' - '+moment(data[i].ends_at,'hh:m:ss').format('hh:mm A')+'</li>';
                             }
 
                             $('#appointments-taken').html(" ");
@@ -224,14 +246,14 @@
                             $('#appointments-taken').append('</ul><hr>');
                         }
                         else {
-                            var  EmptyP='<p>No Appointments taken at '+slot+'</p>';
+
+                            var  EmptyP='<p>No Appointments taken at slot '+slot+' - '+slotTo+'</p>';
 
                             $('#appointments-taken').html(" ");
                             $('#appointments-taken').append('<hr>');
                             //append all options
                             $('#appointments-taken').append(EmptyP);
                             $('#appointments-taken').append('<hr>');
-
                         }
 
                     },
@@ -245,6 +267,10 @@
 
     {{--time picker--}}
     <script type="text/javascript">
+
+        var starts="";
+        var ends="";
+        
         $(document).ready(function() {
 
             /*   $('#slot').change(function() {
@@ -260,16 +286,22 @@
 
             $('#starts_at').mdtimepicker({
                 readOnly: false,
+                hourPadding: true,
             }).on('timechanged', function (e) {
                 console.log(e.value);
                 console.log(e.time);
+                
+                starts=e.value;
             });
 
             $('#ends_at').mdtimepicker({
                 readOnly: false,
+                hourPadding: true,
             }).on('timechanged', function (e) {
                 console.log(e.value);
                 console.log(e.time);
+
+                ends=e.value;
             });
         });
     </script>
@@ -283,38 +315,58 @@
                 var data=$(this).serialize();
 
 
-                $.ajax({
-                    method:'POST',
-                    url:'{{route('facultyAppointment.store')}}',
-                    data:data,
-                    success:function(data){
-                        console.log(data);
-                        console.log(data.length);
+                console.log("times"+slot+" "+slotTo+" "+starts+" "+ends);
 
-                        if (data.type==="success"){
-                            toastr.success(data.message);
+                var format = 'hh:mm A';
+                var slotTime = moment(slot,format);
+                var slotToTime = moment(slotTo,format);
+                var startTime = moment(starts, format);
+                var endTime = moment(ends, format);
 
-                            $('#appointmentForm')[0].reset();
+                console.log("moment times"+slotTime+slotToTime+startTime+endTime);
 
-                            $('#appointments-taken').html("");
-                            $('#available_slots').html("");
+                if ((startTime.isSameOrAfter(slotTime)&&startTime.isSameOrBefore(slotToTime))&&(endTime.isSameOrAfter(slotTime)&&endTime.isSameOrBefore(slotToTime))) {
+                    console.log("time in slot");
+                
+                    $.ajax({
+                        method:'POST',
+                        url:'{{route('facultyAppointment.store')}}',
+                        data:data,
+                        success:function(data){
+                            console.log(data);
+                            console.log(data.length);
 
-                            $('#starts_at').val("");
-                            $('#ends_at').val("");
+                            if (data.type==="success"){
+                                toastr.success(data.message);
+
+                                $('#appointmentForm')[0].reset();
+
+                                $('#appointments-taken').html("");
+                                $('#available_slots').html("");
+
+                                $('#starts_at').val("");
+                                $('#ends_at').val("");
+                            }
+                            if (data.type==="error"){
+                                toastr.error(data.message);
+                            }
+                            if (data.type==="warning"){
+                                toastr.warning(data.message);
+                            }
+
+
+                        },
+                        error:function(){
+
                         }
-                        if (data.type==="error"){
-                            toastr.error(data.message);
-                        }
-                        if (data.type==="warning"){
-                            toastr.warning(data.message);
-                        }
+                    });
 
+                }
+                else {
+                    console.log("time is not in slot");
 
-                    },
-                    error:function(){
-
-                    }
-                });
+                    toastr.warning("Please select valid time from selected slot");
+                }
             });
         });
     </script>

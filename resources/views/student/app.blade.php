@@ -60,7 +60,7 @@
                                 <a class="nav-link" href="{{ route('student.appointments') }}">{{ __('Appointments') }}</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ route('student.faculties') }}">{{ __('Faculty') }}</a>
+                                <a class="nav-link" href="{{ route('student.faculties') }}">{{ __('Faculty Member') }}</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" href="{{ route('student.profile') }}">{{ __('Profile') }}</a>

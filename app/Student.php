@@ -6,23 +6,12 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
-class Student extends Authenticatable
+class Student extends User
 {
-    use Notifiable;
+    //
+    protected $table = 'students';
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
     protected $fillable = [
-        's_id', 'name', 'email', 'phone', 'department', 'photo', 'bio'];
-
-    /**
-     * The attributes that should be hidden for arrays.
-     *
-     * @var array
-     */
-    protected $hidden = [
-        'password','remember_token'];
+        's_id','name', 'email','phone','department','photo','campus','level_term','password',
+    ];
 }

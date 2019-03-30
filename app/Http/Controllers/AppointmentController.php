@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Faculty;
 use App\Schedule;
 use App\Appointment;
+use App\TimeSlot;
 use Carbon\Carbon;
 use DateTime;
 use Dotenv\Exception\ValidationException;
@@ -42,7 +43,7 @@ class AppointmentController extends Controller
 
         $appointments = DB::table('appointments')
             ->join('faculties', 'appointments.f_id', '=', 'faculties.f_id')
-            ->select('appointments.*','faculties.name', 'faculties.email', 'faculties.phone')
+            ->select('appointments.*','faculties.name', 'faculties.email','faculties.photo', 'faculties.phone')
             ->where('appointments.s_id','=',Auth::user()->s_id)
             ->where('appointments.status','!=','deleted')
             ->paginate(10);
@@ -52,8 +53,13 @@ class AppointmentController extends Controller
 
     public function appointmentForm()
     {
-        $faculty=Faculty::all();//get data from table
-        return view('student.addAppointment')->with('faculty',$faculty);
+//        $schedules = DB::table('schedules')
+//            ->select('schedules.*')
+//            ->where('f_id','1001')
+//            ->get();
+
+//        $faculty=Faculty::all();//get data from table
+        return view('student.addAppointment');
 
     }
 
@@ -111,7 +117,8 @@ class AppointmentController extends Controller
             //check if the any appointment available
             $isAvailable = Appointment::select('id')->
             where('f_id', $request->faculty)->where('date', $request->date)->
-            whereBetween('starts_at', [$starts, $ends])->whereBetween('ends_at', [$starts, $ends])->first();
+            whereBetween('starts_at', [$starts, $ends])->whereBetween('ends_at', [$starts, $ends])->
+            where('status','!=','cancelled')->first();
 
             if (empty($isAvailable)) {
                 $appointment = new Appointment();

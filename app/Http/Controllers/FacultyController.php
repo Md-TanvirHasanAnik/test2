@@ -62,6 +62,7 @@ class FacultyController extends Controller
 public function editProfile(Request $request){
         $validation = Validator::make($request->all(), [
             'image' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
+            'f_id' => 'required',
             'name' => 'required',
             'faculty' => 'required',
             'department' => 'required',

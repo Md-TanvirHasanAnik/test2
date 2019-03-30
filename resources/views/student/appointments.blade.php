@@ -14,13 +14,14 @@
     <link href="{{ asset('mdtime/mdtimepicker.css') }}" rel="stylesheet">
     <script src="{{ asset('mdtime/mdtimepicker.js') }}" defer></script>
 
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.css">
     <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js"></script>
 
-    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
 
     <div class="card-body">
         @if (session('status'))
@@ -32,11 +33,25 @@
         <div class="row">
             <div class="card col-md-12">
                 <br><br>
+
+                <div class="col-md-3 col-sm-6 col-12">
+                    <div class="info-box link-stats" onclick="location.href='https://appointo.froid.works/account/bookings?status=completed'">
+                        <span class="info-box-icon bg-success"><i class="fa fa-calendar"></i></span>
+
+                        <div class="info-box-content">
+                            <span class="info-box-text">Completed Bookings</span>
+                            <span class="info-box-number" id="completed-booking">2</span>
+                        </div>
+                        <!-- /.info-box-content -->
+                    </div>
+                    <!-- /.info-box -->
+                </div>
+
                 <div class="row">
                 <div class="col-md-12">
                 <div class="card">
                     <div class="card-header">
-                        Appointments<button id="add-appointment" type="button" class="btn btn-primary float-md-right">Create Appointment</button>
+                        All Appointments<button id="add-appointment" type="button" class="btn btn-primary float-md-right">Create Appointment</button>
                     </div>
                     <!-- /.card-header -->
                     <div class="card-body table-responsive p-0">
@@ -46,7 +61,7 @@
                                 <tr id="row-{{$appointment->id}}">
 
                                     <td class="td-image">
-                                        <a href="{{url("/faculties/$appointment->f_id")}}" data-toggle="tooltip" data-original-title="{{$appointment->name}}"><img src="https://appointo.froid.works/img/default-avatar-user.png" class="border img-bordered-sm img-size-50 img-circle"  ></a>
+                                        <a href="{{url("/faculties/$appointment->f_id")}}" data-toggle="tooltip" data-original-title="{{$appointment->name}}"><img src="{{$appointment->photo}}" class="border img-bordered-sm img-size-50 img-circle"  ></a>
                                     </td>
                                     <td>
                                         <a class="text-uppercase" href="{{url("/faculties/$appointment->f_id")}}">{{$appointment->name}}</a><br>
@@ -65,26 +80,24 @@
                                             <span class="text-uppercase small border border-success text-success badge-pill">{{$appointment->status}}</span>
                                         @elseif($appointment->status=='cancelled')
                                             <span class="text-uppercase small border border-danger text-danger badge-pill">{{$appointment->status}}</span>
-                                        @elseif($appointment->status=='deleted')
-                                            <span class="text-uppercase small border border-danger text-danger badge-pill">{{$appointment->status}}</span>
+                                        @elseif($appointment->status=='active')
+                                            <span class="text-uppercase small border border-primary text-primary badge-pill">{{$appointment->status}}</span>
                                         @elseif($appointment->status=='pending')
                                             <span class="text-uppercase small border border-warning text-warning badge-pill">{{$appointment->status}}</span>
-                                        @elseif($appointment->status=='inprogress')
-                                            <span class="text-uppercase small border border-primary text-primary  badge-pill">{{$appointment->status}}</span>
                                         @endif
                                     </td>
                                     <td class="text-md-center">
 
                                         <input type="hidden" value="{{$appointment->f_id}}" id="fidField-{{$appointment->id}}" class="fid-hidden">
 
-                                        <button  id="edit-{{$appointment->id}}" value="{{$appointment->id}}" {{--data-toggle="modal" data-target="#editModal"--}}  class="edit btn btn-rounded btn-outline-dark btn-sm "><i class="fa fa-edit"></i>Edit</button>
+                                        <button  id="edit-{{$appointment->id}}" value="{{$appointment->id}}" data-toggle="modal" data-target="#editModal"  class="edit btn btn-rounded btn-outline-dark btn-sm "><i class="fa fa-edit"></i>Edit</button>
                                         <br><br>
                                         @if($appointment->status=='cancelled')
                                             <button id="cancel-{{$appointment->id}}" value="{{$appointment->id}}" class="cancel btn btn-rounded btn-outline-dark btn-sm disabled" disabled><i class="fa fa-times"></i>Cancel</button>
                                         @else
                                             <button id="cancel-{{$appointment->id}}" value="{{$appointment->id}}" class="cancel btn btn-rounded btn-outline-dark btn-sm"><i class="fa fa-times"></i>Cancel</button>
                                         @endif
-                                        <br><br><button id="delete-{{$appointment->id}}" value="{{$appointment->id}}" class="delete btn btn-rounded btn-outline-dark btn-sm "><i class="fa fa-trash"></i>Delete</button>
+                                        {{--<br><br><button id="delete-{{$appointment->id}}" value="{{$appointment->id}}" class="delete btn btn-rounded btn-outline-dark btn-sm "><i class="fa fa-trash"></i>Delete</button>--}}
                                         <br>
                                     </td>
                                 </tr>

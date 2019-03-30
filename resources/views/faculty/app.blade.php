@@ -56,7 +56,7 @@
                                 <a class="nav-link" href="{{ route('faculty.appointments') }}">{{ __('Appointments') }}</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ route('faculty.schedule') }}">{{ __('Schedule') }}</a>
+                                <a class="nav-link" href="{{ route('faculty.schedule') }}">{{ __('Counselling Hour') }}</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" href="{{ route('faculty.profile') }}">{{ __('Profile') }}</a>

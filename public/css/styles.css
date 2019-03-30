@@ -4,6 +4,11 @@ td,th,.center{
     vertical-align: inherit !important;
 }
 
+.input-icon{
+    text-align: center;
+    vertical-align: inherit !important;
+}
+
 .datepicker{ z-index:1200 !important; }
 
 .body-box{
@@ -27,6 +32,26 @@ td,th,.center{
 i{
     padding-right: 4px;
 }
+
+/*schedule info table*/
+
+.color-red{
+    color:#b91d19;
+}
+
+.color-green{
+    color:#2fa360;
+}
+
+.schedule-info-table th{
+    font-size: 12px !important;
+}
+
+.schedule-info-table td{
+    font-size: 12px !important;
+}
+
+/*schedule info table*/
 
 /*appointment table*/
 .img-size-50 {
@@ -148,6 +173,56 @@ a {
 }
 
 /*appointment table*/
+
+/*
+ * Component: Info Box
+ * -------------------
+ */
+
+.info-box {
+    -webkit-box-shadow: 0 0 1px rgba(0, 0, 0, 0.125), 0 1px 3px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 0 1px rgba(0, 0, 0, 0.125), 0 1px 3px rgba(0, 0, 0, 0.2);
+    border-radius: 0.25rem;
+    padding: .5rem;
+    min-height: 80px;
+    background: #ffffff;
+}
+
+.info-box .progress {
+    background-color: rgba(0, 0, 0, 0.125);
+    margin: 5px 0;
+    height: 2px;
+}
+
+.info-box .progress .progress-bar {
+    background-color: #ffffff;
+}
+
+.info-box-icon {
+    border-radius: 0.25rem;
+    display: block;
+    width: 70px;
+    text-align: center;
+    font-size: 30px;
+}
+
+.info-box-icon > img {
+    max-width: 100%;
+}
+
+.info-box-content {
+    padding: 5px 10px;
+    -webkit-box-flex: 1;
+    -ms-flex: 1;
+    flex: 1;
+}
+
+.info-box-number {
+    display: block;
+    font-weight: 700;
+}
+
+/*info box*/
 
 /*facultyMembers*/
 

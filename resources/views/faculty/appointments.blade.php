@@ -35,10 +35,13 @@
         <div class="row">
             <div class="card col-md-12">
                 <br><br>
+
+
+
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-header">
-                        All Appointments<input type="button"  id="add-appointment" class="btn btn-primary float-md-right" value="Create Appointment"/>
+                        All Appointments<button  id="add-appointment" class="btn btn-primary float-md-right" >Create Appointment</button>
                     </div>
                     <!-- /.card-header -->
                     <div class="card-body table-responsive-md p-0">
@@ -47,7 +50,7 @@
                             @foreach($appointments as $appointment)
                                 <tr id="row-{{$appointment->id}}">
                                     <td class="td-image">
-                                        <a href="{{url("/students/$appointment->s_id")}}" data-toggle="tooltip" data-original-title="{{$appointment->name}}"><img src="https://appointo.froid.works/img/default-avatar-user.png" class="border img-bordered-sm img-size-50 img-circle"  ></a>
+                                        <a href="{{url("/students/$appointment->s_id")}}" data-toggle="tooltip" data-original-title="{{$appointment->name}}"><img src="{{$appointment->photo}}" class="border img-bordered-sm img-size-50 img-circle"  ></a>
                                     </td>
                                     <td>
                                         <a class="text-uppercase" href="{{url("/students/$appointment->s_id")}}">{{$appointment->name}}</a><br>
@@ -68,25 +71,27 @@
                                             <span class="text-uppercase small border border-danger text-danger badge-pill">{{$appointment->status}}</span>
                                         @elseif($appointment->status=='pending')
                                             <span class="text-uppercase small border border-warning text-warning badge-pill">{{$appointment->status}}</span>
+                                         @elseif($appointment->status=='active')
+                                            <span class="text-uppercase small border border-success text-success badge-pill">{{$appointment->status}}</span>
                                             <br><br><button id="reminder-{{$appointment->id}}" value="{{$appointment->id}}" class="btn btn-rounded btn-outline-dark btn-sm send-reminder"><i class="fa fa-send"></i>Send Reminder</button>
-                                        @elseif($appointment->status=='deleted')
-                                            <span class="text-uppercase small border border-danger text-danger badge-pill">{{$appointment->status}}</span>
-                                        @elseif($appointment->status=='inprogress')
-                                            <span class="text-uppercase small border border-primary text-primary  badge-pill">{{$appointment->status}}</span>
                                         @endif
                                     </td>
-                                    <td class="text-md-center">
+                                    <td class="text-md-center" id="action-{{$appointment->id}}">
 
                                         <input type="hidden" value="{{$appointment->f_id}}" id="fidField-{{$appointment->id}}" class="sid-hidden">
 
-                                        <button  id="edit-{{$appointment->id}}" value="{{$appointment->id}}" {{--data-toggle="modal" data-target="#editModal"--}}  class="edit btn btn-rounded btn-outline-dark btn-sm "><i class="fa fa-edit"></i>Edit</button>
-                                        <br><br>
+                                        {{--<button  id="edit-{{$appointment->id}}" value="{{$appointment->id}}" --}}{{--data-toggle="modal" data-target="#editModal"--}}{{--  class="edit btn btn-rounded btn-outline-dark btn-sm "><i class="fa fa-edit"></i>Edit</button>--}}
+                                        {{--<br><br>--}}
+                                        @if($appointment->status=='pending')
+                                            <button id="accept-{{$appointment->id}}" value="{{$appointment->id}}" class="accept btn btn-rounded btn-outline-dark btn-sm" ><i class="fas fa-check"></i>Accept</button>
+                                            <button id="deny-{{$appointment->id}}" value="{{$appointment->id}}" class="deny btn btn-rounded btn-outline-dark btn-sm" ><i class="fa fa-times"></i>Deny</button>
+                                        @endif
                                         @if($appointment->status=='cancelled')
                                             <button id="cancel-{{$appointment->id}}" value="{{$appointment->id}}" class="cancel btn btn-rounded btn-outline-dark btn-sm disabled" disabled><i class="fa fa-times"></i>Cancel</button>
-                                        @else
+                                        @elseif($appointment->status=='active')
                                             <button id="cancel-{{$appointment->id}}" value="{{$appointment->id}}" class="cancel btn btn-rounded btn-outline-dark btn-sm"><i class="fa fa-times"></i>Cancel</button>
                                         @endif
-                                        <br><br><button id="delete-{{$appointment->id}}" value="{{$appointment->id}}" class="delete btn btn-rounded btn-outline-dark btn-sm "><i class="fa fa-trash"></i>Delete</button>
+                                        {{--<br><br><button id="delete-{{$appointment->id}}" value="{{$appointment->id}}" class="delete btn btn-rounded btn-outline-dark btn-sm "><i class="fa fa-trash"></i>Delete</button>--}}
                                         <br>
                                     </td>
                                 </tr>
@@ -207,6 +212,109 @@
             {{--});--}}
 
             //crud action
+
+            $(".accept").click(function(){
+
+                swal({
+                    title: "Are you sure?",
+                    text: "This appointment will be accepted!",
+                    icon: "info",
+                    buttons: true,
+                    dangerMode: true,
+                })
+                    .then((willAccept) => {
+                        if (willAccept) {
+
+                            var id=$(this).val();
+                            console.log("id "+id);
+
+                            $.ajax({
+                                method:'get',
+                                url:'{{route('facultyAppointment.changeStatus')}}',
+                                data:{id:id,status:'active'},
+                                success:function(data){
+                                    console.log(id+" "+data);
+                                    console.log(data.length);
+
+                                    if (data.type==="success"){
+
+                                        // toastr.success(data.message);
+
+                                        swal('Appointment Accepted', {
+                                            icon: "success",
+                                        });
+
+                                        $("#status-"+id).html("");
+                                        $("#status-"+id).html("<span class='text-uppercase small border border-success text-success badge-pill'>ACTIVE</span>");
+                                        $("#action-"+id).html("");
+                                        $("#action-"+id).html("<button id='cancel-"+id+"' value='"+id+"' class='cancel btn btn-rounded btn-outline-dark btn-sm'><i class='fa fa-times'></i>Cancel</button>");
+
+                                    }
+                                    if (data.type==="error"){
+                                        toastr.error(data.message);
+                                    }
+
+
+                                },
+                                error:function(){
+
+                                }
+                            });
+                        }
+                    });
+            });
+
+            $(".deny").click(function(){
+
+                swal({
+                    title: "Are you sure?",
+                    text: "This appointment will be cancelled!",
+                    icon: "warning",
+                    buttons: true,
+                    dangerMode: true,
+                })
+                    .then((willAccept) => {
+                        if (willAccept) {
+
+                            var id=$(this).val();
+                            console.log("id "+id);
+
+                            $.ajax({
+                                method:'get',
+                                url:'{{route('facultyAppointment.changeStatus')}}',
+                                data:{id:id,status:'cancelled'},
+                                success:function(data){
+                                    console.log(id+" "+data);
+                                    console.log(data.length);
+
+                                    if (data.type==="success"){
+
+                                        // toastr.success(data.message);
+
+                                        swal('Appointment Cancelled', {
+                                            icon: "success",
+                                        });
+
+                                        $("#status-"+id).html("");
+                                        $("#status-"+id).html("<span class='text-uppercase small border border-danger text-danger badge-pill'>CANCELLED</span>");
+                                        $("#action-"+id).html("");
+                                        $("#action-"+id).html("<button id='cancel-"+id+"' value='"+id+"' class='cancel btn btn-rounded btn-outline-dark btn-sm' disabled><i class='fa fa-times'></i>Cancel</button>");
+
+                                    }
+                                    if (data.type==="error"){
+                                        toastr.error(data.message);
+                                    }
+
+
+                                },
+                                error:function(){
+
+                                }
+                            });
+                        }
+                    });
+            });
+
             $(".cancel").click(function(){
 
                 swal({
@@ -271,13 +379,13 @@
                         if (willCancel) {
 
                             var id=$(this).val();
-                            var f_id=$(".fidField-"+id).val();
+
                             console.log("f_id "+f_id);
 
                             $.ajax({
                                 method:'get',
-                                url:'{{route('facultyAppointment.delete')}}',
-                                data:{id:id,f_id:f_id},
+                                url:'{{route('facultyAppointment.changeStatus')}}',
+                                data:{id:id,action:'deleted'},
                                 success:function(data){
                                     console.log(id+" "+data);
                                     console.log(data.length);
@@ -312,7 +420,7 @@
 
             $(".edit").click(function(){
                 id=$(this).val();
-                f_id= $("#fidField-"+id).val();
+
                 $('#id').val(id);
 
                 $.ajax({
@@ -322,20 +430,21 @@
                     success:function(data){
                         console.log(data);
                         console.log(data.length);
+                        f_id= data.f_id;
 
                         //reset form
                         $('#editForm')[0].reset();
 
-                        $('#datepicker').val(data[0].date);
+                        $('#datepicker').val(data.date);
 
-                        $('#starts_at').val(data[0].starts_at);
+                        $('#starts_at').val(data.starts_at);
 
                         // $('#starts_at').remove("#starts_at");
                         // $('#start-icon-div').prepend("  <input name='starts_at' value='"+data[0].starts_at+"' placeholder='"+data[0].starts_at+"' autocomplete='off' type='text' class='form-control' id='starts_at'  >");
                         //
 
-                        $('#ends_at').val(data[0].ends_at);
-                        $('#message').val(data[0].message);
+                        $('#ends_at').val(data.ends_at);
+                        $('#message').val(data.message);
 
                         //  // Add the empty option with the empty message
                         //  var  op='<option value="0" disabled>Select Slot</option>';
@@ -348,11 +457,11 @@
                         $.ajax({
                             type:'get',
                             url:'{{route('ajax.findSlots')}}',
-                            data:{'f_id':f_id,'date':data[0].date},
+                            data:{'f_id':f_id,'date':data.date},
                             success:function(slotData){
                                 console.log(slotData);
                                 console.log(slotData.length);
-                                console.log(data[0].date+" "+data[0].slot);
+                                console.log(data[0].date+" "+data.slot);
 
                                 if (data.length>0) {
                                     $('#available_slots').html(slotData.length + " Slots available");
@@ -363,7 +472,7 @@
                                 var op="";
                                 // Loop through each of the results and append the option to the dropdown
                                 for(var i=0;i<slotData.length;i++){
-                                    if(slotData[i].slot!==data[0].slot)
+                                    if(slotData[i].slot!==data.slot)
                                         op+='<option value="'+slotData[i].slot+'">'+slotData[i].slot+'</option>';
                                     else
                                         op+='<option value="'+slotData[i].slot+' selected">'+slotData[i].slot+'</option>';

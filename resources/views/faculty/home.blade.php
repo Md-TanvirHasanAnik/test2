@@ -18,7 +18,7 @@
                             <div class="col-md-12">
                                 <div class="card">
                                     <div class="card-header">
-                                        <h5 class="card-title">Upcoming Appointments</h5>
+                                        Upcoming Appointments<button  id="add-appointment" class="btn btn-primary float-md-right" >Create Appointment</button>
                                     </div>
                                     <!-- /.card-header -->
                                     <div class="card-body table-responsive-md p-0">
@@ -27,7 +27,7 @@
                                             @foreach($appointments as $appointment)
                                             <tr>
                                                 <td class="td-image">
-                                                    <a href="{{url("/student/$appointment->s_id")}}" data-toggle="tooltip" data-original-title="{{$appointment->name}}"><img src="https://appointo.froid.works/img/default-avatar-user.png" class="border img-bordered-sm img-size-50 img-circle"  ></a>
+                                                    <a href="{{url("/student/$appointment->s_id")}}" data-toggle="tooltip" data-original-title="{{$appointment->name}}"><img src="{{$appointment->photo}}" class="border img-bordered-sm img-size-50 img-circle"  ></a>
                                                 </td>
                                                 <td>
                                                     <a class="text-uppercase" href="{{url("/students/$appointment->s_id")}}">{{$appointment->name}}</a><br>
@@ -50,9 +50,9 @@
                                                         <span class="text-uppercase small border border-danger text-danger badge-pill">{{$appointment->status}}</span>
                                                     @elseif($appointment->status=='pending')
                                                         <span class="text-uppercase small border border-warning text-warning badge-pill">{{$appointment->status}}</span>
-                                                        <br><br><a href="javascript:;" data-booking-id="7" class="btn btn-rounded btn-outline-dark btn-sm send-reminder"><i class="fa fa-send"></i>Send Reminder</a>
-                                                    @elseif($appointment->status=='inprogress')
+                                                    @elseif($appointment->status=='active')
                                                         <span class="text-uppercase small border border-primary text-primary  badge-pill">{{$appointment->status}}</span>
+                                                        <br><br><a href="javascript:;" data-booking-id="7" class="btn btn-rounded btn-outline-dark btn-sm send-reminder"><i class="fa fa-send"></i>Send Reminder</a>
                                                     @endif
                                                 </td>
                                             </tr>

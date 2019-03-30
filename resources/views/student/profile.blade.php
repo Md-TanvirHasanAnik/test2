@@ -73,6 +73,20 @@
                         <div class="col-md-6">
                             <p>{{$student->department}}</p>
                         </div>
+                    </div><div class="row">
+                        <div class="col-md-6">
+                            <label>Level-Term</label>
+                        </div>
+                        <div class="col-md-6">
+                            <p>{{$student->level_term}}</p>
+                        </div>
+                    </div><div class="row">
+                        <div class="col-md-6">
+                            <label>Campus</label>
+                        </div>
+                        <div class="col-md-6">
+                            <p>{{$student->campus}}</p>
+                        </div>
                     </div>
                     <div class="row">
                         <div class="col-md-6">

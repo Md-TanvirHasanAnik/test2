@@ -50,6 +50,7 @@ Route::get('/ajax/searchFaculty', 'AjaxDataController@searchFaculty')->name('aja
 Route::get('/ajax/findSlots', 'AjaxDataController@findSlots')->name('ajax.findSlots');
 Route::get('/ajax/findAppointments', 'AjaxDataController@findAppointments')->name('ajax.findAppointments');
 Route::get ('/ajax/studentAppointments', 'AjaxDataController@studentAppointments')->name('ajax.studentAppointments');
+Route::get ('/ajax/findSchedule', 'AjaxDataController@findSchedule')->name('ajax.findSchedule');
 
 Route::get ('/faculties/{id}', 'StudentController@viewFacultyInfo')->name('student.facultyInfo');
 Route::get ('/students/{id}', 'FacultyController@viewStudentInfo')->name('faculty.studentInfo');
@@ -71,6 +72,6 @@ Route::post ('/faculty/profile/edit', 'FacultyController@editProfile')->name('fa
 Route::get('/faculty/appointments/add', 'FacultyAppointmentController@appointmentForm')->name('facultyAppointment.add');
 Route::get ('/faculty/appointments/edit', 'FacultyAppointmentController@edit')->name('facultyAppointment.edit');
 Route::post('/faculty/appointments/store', 'FacultyAppointmentController@store')->name('facultyAppointment.store');
-Route::get ('/faculty/appointments/delete', 'FacultyAppointmentController@delete')->name('facultyAppointment.delete');
+Route::get ('/faculty/appointments/update', 'FacultyAppointmentController@changeStatus')->name('facultyAppointment.changeStatus');
 Route::get ('/faculty/appointments/cancel', 'FacultyAppointmentController@cancel')->name('facultyAppointment.cancel');
 Route::post ('/faculty/appointments/update', 'FacultyAppointmentController@update')->name('facultyAppointment.update');

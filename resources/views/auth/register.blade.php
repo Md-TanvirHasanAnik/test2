@@ -8,7 +8,7 @@
                 <div class="card-header">{{ __('Register') }}</div>
 
                 <div class="card-body">
-                    <form method="POST" action="{{ route('register') }}">
+                    <form method="POST" id="registerForm" action="{{ route('register') }}" autocomplete="off">
                         @csrf
 
                         <div class="form-group row">
@@ -71,11 +71,69 @@
                             <label for="department" class="col-md-4 col-form-label text-md-right">{{ __('Department') }}</label>
 
                             <div class="col-md-6">
-                                <input id="department" type="text" class="form-control{{ $errors->has('department') ? ' is-invalid' : '' }}" name="department" value="{{ old('department') }}" required autofocus>
-
+                                {{--<input id="department" type="text" class="form-control{{ $errors->has('department') ? ' is-invalid' : '' }}" name="department" value="{{ old('department') }}" required autofocus>--}}
+                                <select name="department" class="form-control" id="department" >
+                                    {{--<option value="" selected="selected" disabled>Select Department</option>--}}
+                                    <option value="CSE">CSE</option>
+                                    <option value="SWE">SWE</option>
+                                    <option value="EEE">EEE</option>
+                                    <option value="BBA">BBA</option>
+                                    <option value="Textile">Textile</option>
+                                    <option value="LAW">LAW</option>
+                                    <option value="Pharmacy">Pharmacy</option>
+                                    <option value="NFE">NFE</option>
+                                </select>
                                 @if ($errors->has('department'))
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $errors->first('department') }}</strong>
+                                    </span>
+                                @endif
+                            </div>
+                        </div>
+
+
+                        <div class="form-group row">
+                            <label for="level_term" class="col-md-4 col-form-label text-md-right">{{ __('Level-Term') }}</label>
+
+                            <div class="col-md-6">
+                                {{--<input id="campus" type="text" class="form-control{{ $errors->has('campus') ? ' is-invalid' : '' }}" name="campus" value="{{ old('campus') }}" required autofocus>--}}
+                                <select name="level_term" class="form-control" id="level_term" >
+                                    {{--<option value="" selected="selected" disabled>Select Level-Term</option>--}}
+                                    <option value="Level 1 Term 1">Level 1 Term 1</option>
+                                    <option value="Level 1 Term 1">Level 1 Term 2</option>
+                                    <option value="Level 1 Term 1">Level 1 Term 3</option>
+                                    <option value="Level 1 Term 1">Level 2 Term 1</option>
+                                    <option value="Level 1 Term 1">Level 2 Term 2</option>
+                                    <option value="Level 1 Term 1">Level 2 Term 3</option>
+                                    <option value="Level 1 Term 1">Level 3 Term 1</option>
+                                    <option value="Level 1 Term 1">Level 3 Term 2</option>
+                                    <option value="Level 1 Term 1">Level 3 Term 3</option>
+                                    <option value="Level 1 Term 1">Level 4 Term 1</option>
+                                    <option value="Level 1 Term 1">Level 4 Term 2</option>
+                                    <option value="Level 1 Term 1">Level 4 Term 3</option>
+                                </select>
+                                @if ($errors->has('level_term'))
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $errors->first('level_term') }}</strong>
+                                    </span>
+                                @endif
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="campus" class="col-md-4 col-form-label text-md-right">{{ __('Campus') }}</label>
+
+                            <div class="col-md-6">
+                                {{--<input id="campus" type="text" class="form-control{{ $errors->has('campus') ? ' is-invalid' : '' }}" name="campus" value="{{ old('campus') }}" required autofocus>--}}
+                                <select name="campus" class="form-control" id="department" >
+                                    {{--<option value="" selected="selected" disabled>Select Campus</option>--}}
+                                    <option value="Ashulia">Ashulia</option>
+                                    <option value="Dhanmondi">Dhanmondi</option>
+                                    <option value="Uttara">Uttara</option>
+                                </select>
+                                @if ($errors->has('campus'))
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $errors->first('campus') }}</strong>
                                     </span>
                                 @endif
                             </div>
@@ -116,4 +174,49 @@
         </div>
     </div>
 </div>
+
+{{--submit--}}
+{{--<script type="text/javascript">--}}
+    {{--$(document).ready(function(){--}}
+        {{--$('#registerForm').on('submit',function(event){--}}
+
+            {{--event.preventDefault();--}}
+            {{--var data=$(this).serialize();--}}
+
+
+            {{--$.ajax({--}}
+                {{--method:'POST',--}}
+                {{--url:'{{route('appointment.store')}}',--}}
+                {{--data:data,--}}
+                {{--success:function(data){--}}
+                    {{--console.log(data);--}}
+                    {{--console.log(data.length);--}}
+
+                    {{--if (data.type==="success"){--}}
+                        {{--toastr.success(data.message);--}}
+
+                        {{--$('#appointmentForm')[0].reset();--}}
+
+                        {{--$('#appointments-taken').html("");--}}
+                        {{--$('#available_slots').html("");--}}
+
+                        {{--$('#starts_at').val("");--}}
+                        {{--$('#ends_at').val("");--}}
+                    {{--}--}}
+                    {{--if (data.type==="error"){--}}
+                        {{--toastr.error(data.message);--}}
+                    {{--}--}}
+                    {{--if (data.type==="warning"){--}}
+                        {{--toastr.warning(data.message);--}}
+                    {{--}--}}
+
+
+                {{--},--}}
+                {{--error:function(){--}}
+
+                {{--}--}}
+            {{--});--}}
+        {{--});--}}
+    {{--});--}}
+{{--</script>--}}
 @endsection

@@ -57,7 +57,7 @@
                             <?php $ends = strtotime($slot->slot)+(90*60); ?>
                             <tr>
                                 <td>
-                                    {{$slot->slot}}-<?php echo date("h:i", $ends) ?>
+                                    {{$slot->slot}} - {{ date("h:i A", $ends) }}
                                     <input type="hidden" name="type" value="regular" id="type">
                                 </td>
 

@@ -60,7 +60,7 @@
                     <div class="form-group">
                         <label class="col-lg-3 control-label">Employee ID</label>
                         <div class="col-lg-8">
-                            <input class="form-control" type="text" name="f_id" value="{{$faculty->f_id}}" disabled>
+                            <input class="form-control" type="text" name="f_id" value="{{$faculty->f_id}}">
                         </div>
                     </div>
                     <div class="form-group">

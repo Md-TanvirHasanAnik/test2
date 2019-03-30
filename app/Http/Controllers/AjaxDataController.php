@@ -43,12 +43,21 @@ class AjaxDataController extends Controller
         }
     }
 
+    public function findSchedule(Request $request){
+
+        $schedules = DB::table('schedules')
+            ->select('schedules.*')
+            ->where('f_id',$request->f_id)
+            ->get();
+
+        return response()->json($schedules);//then sent this data to ajax success
+    }
 
 
     public function findFaculty(Request $request){
 
         //$request->id here is the id of our chosen option id
-        $data=Faculty::select('name','f_id')->where('dept',$request->dept)->get();
+        $data=Faculty::select('name','f_id')->where('department',$request->dept)->get();
 
         return response()->json($data);//then sent this data to ajax success
     }

@@ -40,7 +40,7 @@ class FacultyAppointmentController extends Controller
 
         $appointments = DB::table('appointments')
             ->join('students', 'appointments.s_id', '=', 'students.s_id')
-            ->select('appointments.*','students.name', 'students.email', 'students.phone')
+            ->select('appointments.*','students.name', 'students.email', 'students.photo','students.phone')
             ->where('appointments.f_id','=',Auth::user()->f_id)
             ->where('appointments.status','!=','deleted')
             ->paginate(10);
@@ -176,7 +176,7 @@ class FacultyAppointmentController extends Controller
 
     }
 
-    public function delete(Request $request)
+    public function changeStatus(Request $request)
     {
 
         //check if the any appointment available
@@ -186,18 +186,16 @@ class FacultyAppointmentController extends Controller
 
         if (!empty($appointment)) {
 
-            $appointment->status = "deleted";
+            $appointment->status = $request->status;
             $appointment->updated_by =Auth::user()->f_id;
             $appointment->save();
 
             $response = array(
-                'message' => 'Appointment is Deleted Successfully',
                 'type' => 'success'
             );
             return response()->json($response);
         } else {
             $response = array(
-                'message' => 'Something error happened.',
                 'type' => 'error'
             );
 
@@ -228,11 +226,11 @@ class FacultyAppointmentController extends Controller
         //
         //$request->id here is the id of our chosen option id
         $data = Appointment::select('*')->
-        where('id', $request->id)->get();
+        where('id', $request->id)->first();
 
 
-        $data[0]->starts_at=date("h:i A",strtotime($data[0]->starts_at));
-        $data[0]->ends_at=date("h:i A",strtotime($data[0]->ends_at));
+        $data[0]->starts_at=date("h:i A",strtotime($data->starts_at));
+        $data[0]->ends_at=date("h:i A",strtotime($data->ends_at));
 
 
         return response()->json($data);//then sent this data to ajax success
