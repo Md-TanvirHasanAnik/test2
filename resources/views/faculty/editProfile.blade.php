@@ -49,7 +49,7 @@
 
 
                 <!-- edit form column -->
-                <div class="col-md-8 personal-info">
+                <div class="col-md-4 personal-info">
                     {{--<div class="alert alert-info alert-dismissable">--}}
                     {{--<a class="panel-close close" data-dismiss="alert">×</a>--}}
                     {{--<i class="fa fa-coffee"></i><strong></strong>--}}
@@ -58,58 +58,58 @@
                     <hr>
 
                     <div class="form-group">
-                        <label class="col-lg-3 control-label">Employee ID</label>
-                        <div class="col-lg-8">
+                        <label class="col control-label">Employee ID</label>
+                        <div class="col">
                             <input class="form-control" type="text" name="f_id" value="{{$faculty->f_id}}">
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="col-lg-3 control-label">Name</label>
-                        <div class="col-lg-8">
+                        <label class="col control-label">Name</label>
+                        <div class="col">
                             <input class="form-control" type="text" name="name" value="{{$faculty->name}}">
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="col-lg-3 control-label">Faculty</label>
-                        <div class="col-lg-8">
+                        <label class="col control-label">Faculty</label>
+                        <div class="col">
                             <input class="form-control" type="text" name="faculty" value="{{$faculty->faculty}}">
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="col-lg-3 control-label">Department</label>
-                        <div class="col-lg-8">
+                        <label class="col control-label">Department</label>
+                        <div class="col">
                             <input class="form-control" type="text" name="department" value="{{$faculty->department}}">
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="col-lg-3 control-label">Designation</label>
-                        <div class="col-lg-8">
+                        <label class="col control-label">Designation</label>
+                        <div class="col">
                             <input class="form-control" type="text" name="designation" value="{{$faculty->designation}}">
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="col-lg-3 control-label">Email</label>
-                        <div class="col-lg-8">
+                        <label class="col control-label">Email</label>
+                        <div class="col">
                             <input class="form-control" type="text" name="email" value="{{$faculty->email}}" disabled>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="col-lg-3 control-label">Phone</label>
-                        <div class="col-lg-8">
+                        <label class="col control-label">Phone</label>
+                        <div class="col">
                             <input class="form-control" type="text" name="phone" value="{{$faculty->phone}}">
                         </div>
                     </div>
 
                     <div class="form-group">
-                        <label class="col-lg-3 control-label">Bio</label>
-                        <div class="col-lg-8">
+                        <label class="col control-label">Bio</label>
+                        <div class="col">
                             <textarea class="form-control" type="text" name="bio" rows="5">{{$faculty->bio}}</textarea>
                         </div>
                     </div>
 
                     <div class="form-group">
-                        <label class="col-md-3 control-label"></label>
-                        <div class="col-md-8">
+                        <label class="col control-label"></label>
+                        <div class="col">
                             <input type="submit" name="submit" class="btn btn-primary" value="Save Changes">
                             <span></span>
                             {{--<input type="reset" class="btn btn-default" value="Clear">--}}
@@ -117,6 +117,27 @@
                     </div>
 
                 </div>
+
+
+                  <!-- edit form column -->
+        <div class="col-md-4">
+            <br><hr>
+              <div class="form-group">
+                    <label class="col control-label">Research Interests ( seperate with comma ',' )</label>
+                    <div class="col">
+                        <input class="form-control" type="text" name="research_area" value="{{$faculty->research_area}}">
+                    </div>
+                </div>
+
+                 <div class="form-group">
+                    <label class="col control-label">Portfolio Site ( with https:// )</label>
+                    <div class="col">
+                        <input class="form-control" type="text" name="portfolio" value="{{$faculty->portfolio}}">
+                    </div>
+                </div>
+        </div>
+
+
             </div>
         </form>
     </div>

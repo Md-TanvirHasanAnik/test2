@@ -45,9 +45,13 @@ class AjaxDataController extends Controller
 
     public function findSchedule(Request $request){
 
+//        $today=date("Y-m-d", strtotime($request->starts_at));
+        $today=date("Y-m-d");
+
         $schedules = DB::table('schedules')
             ->select('schedules.*')
             ->where('f_id',$request->f_id)
+            ->where('ends_at','>=',$today)
             ->get();
 
         return response()->json($schedules);//then sent this data to ajax success
@@ -57,9 +61,57 @@ class AjaxDataController extends Controller
     public function findFaculty(Request $request){
 
         //$request->id here is the id of our chosen option id
-        $data=Faculty::select('name','f_id')->where('department',$request->dept)->get();
-
+        if ($request->department=='all') {
+           $data=Faculty::select('*')
+           ->get();
+        }
+        else{
+            $data=Faculty::select('*')->where('department',$request->department)->get();
+        }
+       
         return response()->json($data);//then sent this data to ajax success
+    }
+
+    public function getFacultyMembers(Request $request){
+
+        //$request->id here is the id of our chosen option id
+        if ($request->department=='all') {
+           $data=Faculty::select('*')
+           ->where('available','yes')
+           ->get();
+        }
+        else{
+            $data=Faculty::select('*')
+            ->where('department',$request->department)
+            ->where('available','yes')
+            ->get();
+        }
+       
+        return response()->json($data);//then sent this data to ajax success
+    }
+
+    public function checkAvailability(Request $request){
+
+        
+            $available=Faculty::select('available')
+            ->where('f_id',$request->f_id)
+            ->first();
+
+            if ($available->available=='yes') {
+                 $response = array(
+                            'available' => 'yes'
+                        );
+                        return response()->json($response);
+            }
+            else{
+                 $response = array(
+                            'available' => 'no'
+                        );
+                        return response()->json($response);
+            }
+        
+       
+        // return response()->json($data);//then sent this data to ajax success
     }
 
     public function findSlots(Request $request){
@@ -103,7 +155,8 @@ class AjaxDataController extends Controller
 
         //$request->id here is the id of our chosen option id
         $data = Appointment::select('starts_at', 'ends_at')->
-        where('f_id', $f_id)->where('date',$date)->where('slot',$slot)->get();
+        where('f_id', $f_id)->where('date',$date)->where('slot',$slot)->
+        where('status','!=','cancelled')->get();
 
 
         return response()->json($data);//then sent this data to ajax success
@@ -112,8 +165,43 @@ class AjaxDataController extends Controller
 
     public function searchFaculty(Request $request){
         //$request->id here is the id of our chosen option id
-        $data = Faculty::select('name','f_id','dept')->where("name","LIKE","%{$request->get('query')}%")->get();
+        if ($request->department=="all") {
+              $data = Faculty::select('*')->where("name","LIKE","%{$request->get('query')}%")->get();
+        }
+        else{
+             $data = Faculty::select('*')->
+             where("department","=",$request->department)->where("name","LIKE","%{$request->get('query')}%")->get();
+        }
+      
         return response()->json($data);//then sent this data to ajax success
 
+    }
+
+    public function searchByResearchArea(Request $request){
+        //$request->id here is the id of our chosen option id
+        if ($request->department=="all") {
+              $data = Faculty::select('*')->where("research_area","LIKE","%{$request->get('query')}%")->get();
+        }
+        else{
+             $data = Faculty::select('*')->
+             where("department","=",$request->department)->where("research_area","LIKE","%{$request->get('query')}%")->get();
+        }
+        return response()->json($data);//then sent this data to ajax success
+
+    }
+
+    public function allFaculty(Request $request){
+
+        //$request->id here is the id of our chosen option id
+       
+
+        if (empty($request->department)) {
+              $data=Faculty::select('*')->get();
+        }
+        else{
+             $data=Faculty::select('*')-> where("department","=",$request->department)->get();
+        }
+
+        return response()->json($data);//then sent this data to ajax success
     }
 }

@@ -59,7 +59,6 @@ class RegisterController extends Controller
             'department' => ['required', 'string', 'max:255'],
             'campus' => ['required'],
             'level_term' => ['required'],
-            'photo' => ['string', 'max:255'],
             'password' => ['required', 'string', 'min:6', 'confirmed'],
         ]);
     }

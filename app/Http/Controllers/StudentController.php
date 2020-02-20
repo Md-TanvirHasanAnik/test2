@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Dotenv\Exception\ValidationException;
+use Image;
 
 class StudentController extends Controller
 {
@@ -68,6 +69,8 @@ class StudentController extends Controller
                 'name' => 'required',
                 'department' => 'required',
                 'phone' => 'required',
+                'campus' => 'required',
+                'level_term' => 'required',
             ]);
             if($validation->fails())
             {
@@ -92,9 +95,15 @@ class StudentController extends Controller
 
                 if ($request->hasFile('image')) {
                     $image = $request->file('image');
-                    $image_name = Auth::user()->name . time() . '.' . $image->getClientOriginalExtension();
-                    $image->move(public_path('images'), $image_name);
+                    $image_name = Auth::user()->s_id . '.' . $image->getClientOriginalExtension();
 
+
+                   //using intervention library
+                Image::make($image)->resize(286,300)->save(public_path('/images/'.$image_name));
+
+                // $image->move(public_path('images'), $image_name);
+
+                $image_path='/images/' . $image_name;
                     $image_path='/images/' . $image_name;
                 }
 
@@ -102,6 +111,11 @@ class StudentController extends Controller
                 $student->department=$request->department;
                 $student->phone=$request->phone;
                 $student->photo=$image_path;
+                $student->phone=$request->phone;
+                $student->campus=$request->campus;
+                $student->level_term=$request->level_term;
+                $student->skills=$request->skills;
+                $student->portfolio=$request->portfolio;
                 $student->bio=$request->bio;
                 $student->save();
 
@@ -123,6 +137,8 @@ class StudentController extends Controller
             ->where('f_id','=',$id)
             ->first();
 
+
+
         return view('student.viewFacultyProfile',compact('faculty'));
     }
 
@@ -132,7 +148,11 @@ class StudentController extends Controller
             ->select('*')
             ->paginate(12);
 
-        return view('student.facultyMembers',compact('faculties'));
+        $departments = DB::table('departments')
+            ->select('*')
+            ->get();
+
+        return view('student.facultyMembers',compact('faculties','departments'));
     }
 
 }

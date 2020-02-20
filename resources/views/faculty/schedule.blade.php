@@ -16,6 +16,37 @@
     <link href="{{ URL::asset('css/styles.css') }}" rel="stylesheet" type="text/css" >
     <link rel="stylesheet" type="text/css" href="https://unpkg.com/magic-input/dist/magic-input.min.css">
 
+
+<div class="container card">
+    <div class="col-md-12 ">
+        <br>
+         Are you available for counseling?
+        <div class="float-md-right">
+            <form id="availableForm" method="POST">
+                @csrf
+              @if($available->available=='yes')
+                <label class="radio-inline" style="margin-right: 16px;"><input type="radio" name="available" value="yes" style="margin-right: 4px;" checked>Available</label>
+              @else
+                <label class="radio-inline" style="margin-right: 16px;"><input type="radio" name="available" value="yes" style="margin-right: 4px;" >Available</label>
+              @endif
+                 @if($available->available=='no')
+                <label class="radio-inline" style="margin-right: 16px;"><input type="radio" name="available" value="no" style="margin-right: 4px;" checked>Unavailable</label>
+              @else
+                <label class="radio-inline" style="margin-right: 16px;"><input type="radio" name="available" value="no" style="margin-right: 4px;" >Unvailable</label>
+              @endif
+              <input type="submit" name="submit" class="btn btn-primary">
+            </form>
+         
+        </div>
+
+                    
+        
+    </div>
+    <br>
+</div>
+
+<br>
+
 <div class="container card">
     <div class="col-md-12 ">
 
@@ -146,6 +177,9 @@
         </form>
     </div>
 </div>
+
+
+
         {{--<script type="text/javascript">--}}
 
             {{--$('.date').datepicker({--}}
@@ -155,6 +189,46 @@
 
             {{--});--}}
         {{--</script>--}}
+
+         {{--submit--}}
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $('#availableForm').on('submit',function(event){
+
+                event.preventDefault();
+                var data=$(this).serialize();
+
+
+                $.ajax({
+                    method:'POST',
+                    url:'{{ route('faculty.availability') }}',
+                    data:data,
+                    success:function(data){
+                        console.log(data);
+                        console.log(data.length);
+
+                        if (data.type==="success"){
+                            toastr.success(data.message);
+
+
+
+                        }
+                        if (data.type==="error"){
+                            toastr.error(data.message);
+                        }
+                        if (data.type==="warning"){
+                            toastr.warning(data.message);
+                        }
+
+
+                    },
+                    error:function(){
+
+                    }
+                });
+            });
+        });
+    </script>
 
     {{--submit--}}
     <script type="text/javascript">
@@ -195,6 +269,8 @@
             });
         });
     </script>
+
+
 
     @endsection
 

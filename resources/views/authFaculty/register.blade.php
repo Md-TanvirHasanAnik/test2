@@ -1,4 +1,4 @@
-@extends('layouts.app.faculty')
+@extends('faculty.app')
 
 @section('content')
 <div class="container">
@@ -11,6 +11,22 @@
                     <form method="POST" action="{{ route('register.faculty') }}">
                         @csrf
 
+                        
+
+                        <div class="form-group row">
+                            <label for="f_id" class="col-md-4 col-form-label text-md-right">{{ __('Employee ID') }}</label>
+
+                            <div class="col-md-6">
+                                <input id="f_id" type="text" class="form-control{{ $errors->has('f_id') ? ' is-invalid' : '' }}" name="f_id" value="{{ old('f_id') }}" required autofocus>
+
+                                @if ($errors->has('f_id'))
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $errors->first('f_id') }}</strong>
+                                    </span>
+                                @endif
+                            </div>
+                        </div>
+
                         <div class="form-group row">
                             <label for="name" class="col-md-4 col-form-label text-md-right">{{ __('Name') }}</label>
 
@@ -20,20 +36,6 @@
                                 @if ($errors->has('name'))
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $errors->first('name') }}</strong>
-                                    </span>
-                                @endif
-                            </div>
-                        </div>
-
-                        <div class="form-group row">
-                            <label for="s_id" class="col-md-4 col-form-label text-md-right">{{ __('ID') }}</label>
-
-                            <div class="col-md-6">
-                                <input id="s_id" type="text" class="form-control{{ $errors->has('s_id') ? ' is-invalid' : '' }}" name="s_id" value="{{ old('s_id') }}" required autofocus>
-
-                                @if ($errors->has('s_id'))
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $errors->first('s_id') }}</strong>
                                     </span>
                                 @endif
                             </div>
@@ -62,6 +64,34 @@
                                 @if ($errors->has('phone'))
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $errors->first('phone') }}</strong>
+                                    </span>
+                                @endif
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="designation" class="col-md-4 col-form-label text-md-right">{{ __('Designation') }}</label>
+
+                            <div class="col-md-6">
+                                <input id="designation" type="text" class="form-control{{ $errors->has('designation') ? ' is-invalid' : '' }}" name="designation" value="{{ old('designation') }}" required autofocus>
+
+                                @if ($errors->has('designation'))
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $errors->first('designation') }}</strong>
+                                    </span>
+                                @endif
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="faculty" class="col-md-4 col-form-label text-md-right">{{ __('Faculty') }}</label>
+
+                            <div class="col-md-6">
+                                <input id="faculty" type="text" class="form-control{{ $errors->has('faculty') ? ' is-invalid' : '' }}" name="faculty" value="{{ old('faculty') }}" required autofocus>
+
+                                @if ($errors->has('faculty'))
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $errors->first('faculty') }}</strong>
                                     </span>
                                 @endif
                             </div>

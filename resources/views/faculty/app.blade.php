@@ -18,14 +18,17 @@
     @stack('styles')
     @stack('scripts')
 
+
     <!-- Styles -->
+     <link href="{{ asset('css/fontawesome-all.css') }}" rel="stylesheet">
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 </head>
 <body>
     <div id="app">
-        <nav class="navbar navbar-expand-md navbar-light navbar-laravel">
+        <nav class="navbar navbar-expand-md navbar-dark bg-dark navbar-laravel">
             <div class="container">
-                <a class="navbar-brand" href="{{ url('/faculty/home') }}">
+                 <img src="/../images/app/logo.svg" style="width:72px; margin-right: 8px; ">
+                <a class="navbar-brand" href="{{ url('/') }}">
                     {{ config('app.name', 'Laravel') }}
                 </a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
@@ -42,35 +45,78 @@
                     <ul class="navbar-nav ml-auto">
                         <!-- Authentication Links -->
                         @if(Auth::guard()->guest()||!Auth::guard('faculty')->check())
-                            <li class="nav-item">
-                                <a class="nav-link" href="{{ route('login.faculty') }}">{{ __('Login') }}</a>
+                            
+
+                             <li class="nav-item dropdown">
+
+                                <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                                    Login <span class="caret"></span>
+                                </a>
+
+                                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                                    <a class="dropdown-item" href="{{ route('login') }}">
+                                         <i class="fas fa-sign-in-alt"></i>
+                                        {{ __('Login As Student') }}
+                                    </a>
+
+                                    <a class="dropdown-item" href="{{ route('login.faculty') }}">
+                                        <i class="fas fa-sign-in-alt"></i>
+                                        {{ __('Login As Faculty Member') }}
+                                    </a>
+                                </div>
+                                
                             </li>
+
                             @if (Route::has('register'))
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('register.faculty') }}">{{ __('Register') }}</a>
+                                <li class="nav-item dropdown">
+                                    
+
+                                     <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                                        Register <span class="caret"></span>
+                                    </a>
+
+                                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                                         <a class="dropdown-item" href="{{ route('register') }}">
+                                           <i class="fas fa-user-edit"></i>
+                                            {{ __('Register As Student') }}
+                                        </a>
+                                         <a class="dropdown-item" href="{{ route('register.faculty') }}">
+                                           <i class="fas fa-user-edit"></i>
+                                            {{ __('Register As Faculty Member') }}
+                                        </a>
+                                    </div>
+
                                 </li>
                             @endif
                         @else
 
+                            <li class="nav-item ">
+                                <a class="nav-link " href="{{ route('faculty.home') }}">
+                                     <i class="fas fa-home"></i>
+                                {{ __('Home') }}</a>
+                            </li>
                             <li class="nav-item">
                                 <a class="nav-link" href="{{ route('faculty.appointments') }}">{{ __('Appointments') }}</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" href="{{ route('faculty.schedule') }}">{{ __('Counselling Hour') }}</a>
                             </li>
-                            <li class="nav-item">
+                            <li class="nav-item ">
                                 <a class="nav-link" href="{{ route('faculty.profile') }}">{{ __('Profile') }}</a>
                             </li>
 
                             <li class="nav-item dropdown">
-                                <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                                    {{ Auth::user()->name }} <span class="caret"></span>
+                                <a id="navbarDropdown" class="nav-link" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                                     {{ Auth::user()->name }} 
+                                     <img src="{{ Auth::user()->photo }}" style="width:24px; height:24px;  border-radius:50%">
                                 </a>
 
                                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+
                                     <a class="dropdown-item" href="{{ route('logout.faculty') }}"
                                        onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
+                                        <i class="fas fa-sign-out-alt"></i>
                                         {{ __('Logout') }}
                                     </a>
 
@@ -89,5 +135,6 @@
             @yield('content')
         </main>
     </div>
+     @include('footer')
 </body>
 </html>

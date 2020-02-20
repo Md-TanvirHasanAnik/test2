@@ -57,6 +57,9 @@ class Handler extends ExceptionHandler
                     case 'faculty':
                         $login = 'login.faculty';
                         break;
+                    case 'admin':
+                        $login = 'login.admin';
+                        break;
                     default:
                         $login = 'login';
                         break;
@@ -82,6 +85,10 @@ class Handler extends ExceptionHandler
         switch ($guard){
             case 'faculty':
                 $redirect=route('login.faculty');
+                break;
+
+            case 'admin':
+                $redirect=route('login.admin');
                 break;
 
             default:

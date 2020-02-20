@@ -6,6 +6,7 @@ use App\Appointment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 
 class FacultyHomeController extends Controller
 {
@@ -21,11 +22,14 @@ class FacultyHomeController extends Controller
 
 //        $appointments=Appointment::all();
 
+          $today = Carbon::now()->setTimezone('Asia/Dhaka')->format('Y-m-d');
+
         $appointments = DB::table('appointments')
             ->join('students', 'appointments.s_id', '=', 'students.s_id')
             ->select('appointments.*','students.name', 'students.email','students.photo', 'students.phone')
             ->where('appointments.f_id','=',Auth::user()->f_id)
-            ->where('appointments.status','=','pending')
+            ->where('appointments.status','!=','cancelled')
+            ->where('appointments.date','=',$today)
             ->paginate(10);
 
 

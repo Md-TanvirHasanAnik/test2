@@ -20,7 +20,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 
 
-    <div class="card-body">
+
+    <div class="card-body" style="height: 100vh !important">
         @if (session('status'))
             <div class="alert alert-success" role="alert">
                 {{ session('status') }}
@@ -33,7 +34,7 @@
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-header">
-                        Upcoming Appointments<button  id="add-appointment" class="btn btn-primary float-md-right" >Create Appointment</button>
+                        Todays Appointments<button  id="add-appointment" class="btn btn-primary float-md-right" >Request Appointment</button>
                     </div>
                     <!-- /.card-header -->
                     <div class="card-body table-responsive-md p-0">
@@ -63,7 +64,7 @@
                                             <span class="text-uppercase small border border-danger text-danger badge-pill">{{$appointment->status}}</span>
                                         @elseif($appointment->status=='pending')
                                             <span class="text-uppercase small border border-warning text-warning badge-pill">{{$appointment->status}}</span>
-                                        @elseif($appointment->status=='active')
+                                        @elseif($appointment->status=='approved')
                                             <span class="text-uppercase small border border-primary text-primary  badge-pill">{{$appointment->status}}</span>
                                         @endif
                                     </td>

@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use Image;
 
 class FacultyController extends Controller
 {
@@ -93,8 +94,12 @@ public function editProfile(Request $request){
 
             if ($request->hasFile('image')) {
                 $image = $request->file('image');
-                $image_name = Auth::user()->name . time() . '.' . $image->getClientOriginalExtension();
-                $image->move(public_path('images'), $image_name);
+                $image_name = Auth::user()->f_id . '.' . $image->getClientOriginalExtension();
+
+                //using intervention library
+                Image::make($image)->resize(286,300)->save(public_path('/images/'.$image_name));
+
+                // $image->move(public_path('images'), $image_name);
 
                 $image_path='/images/' . $image_name;
             }
@@ -105,6 +110,8 @@ public function editProfile(Request $request){
             $faculty->designation = $request->designation;
             $faculty->phone = $request->phone;
             $faculty->photo = $image_path;
+            $faculty->research_area=$request->research_area;
+            $faculty->portfolio=$request->portfolio;
             $faculty->bio=$request->bio;
             $faculty->save();
 
@@ -119,6 +126,50 @@ public function editProfile(Request $request){
         }
     }
 
+
+public function availability(Request $request)
+    {
+
+       $validation = Validator::make($request->all(), [
+            'available' => 'required',
+        ]);
+        if($validation->fails())
+        {
+
+
+           return response()->json([
+               'message'   => 'Please select an option',
+               'type'  => 'error',
+           ]);
+        }
+        else {
+
+
+            $result=DB::table('faculties')
+            ->where('f_id',Auth::user()->f_id)
+            ->update(['available'=>$request->available]);
+
+
+
+            if ($result) {
+                 $response = array(
+                            'message' => 'Availability is Changed Successfully',
+                            'type' => 'success'
+                        );
+                        return response()->json($response);
+            }
+            else{
+                $response = array(
+                            'message' => 'Availability is not Changed',
+                            'type' => 'error'
+                        );
+                        return response()->json($response);
+            }
+
+        }
+           
+
+   }
 
 
     public function viewStudentInfo($id){

@@ -33,14 +33,17 @@
                 <div class="profile-work">
                     <p>SKILLS</p>
                     <ul>
-                        <li>Web Designer</li>
-                        <li>Web Developer</li>
-                        <li>WordPress</li>
-                        <li>WooCommerce</li>
-                        <li>PHP, .Net</li>
+                         <!-- {{$student->skills}} -->
+
+                        <?php $skills=explode(',',$student->skills) ?>
+
+                        @foreach($skills as $skill)
+                        <li>{{$skill}}</li>
+
+                        @endforeach
                     </ul>
                     <p>Portfolio</p>
-                    <a href="">Website Link</a><br/>
+                   <a href="{{$student->portfolio}}">Portfolio Website</a><br/>
                 </div>
             </div>
             <div class="col-md-8 profile-info">

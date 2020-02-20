@@ -82,11 +82,11 @@ input {
     border-bottom:2px solid #0062cc;
 }
 .profile-work{
-    padding: 14%;
-    margin-top: -15%;
+    padding: 10%;
+    margin-top: -10%;
 }
 .profile-work p{
-    font-size: 12px;
+    font-size: 14px;
     color: #818182;
     font-weight: 600;
     margin-top: 10%;

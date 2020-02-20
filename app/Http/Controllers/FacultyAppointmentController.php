@@ -38,14 +38,40 @@ class FacultyAppointmentController extends Controller
 //        $faculty=Faculty::all();//get data from table
 //        return view('faculty.appointments')->with('faculty',$faculty);
 
+         $counts=array();
+
+        $counts['all']=DB::table('appointments')
+                 ->where('f_id','=',Auth::user()->f_id)->count();
+
+         $counts['pending']=DB::table('appointments')
+                ->where('status','=','pending')
+                 ->where('f_id','=',Auth::user()->f_id)->count();
+
+         $counts['approved']=DB::table('appointments')
+                ->where('status','=','approved')
+                 ->where('f_id','=',Auth::user()->f_id)->count();
+
+        $counts['completed']=DB::table('appointments')
+                ->where('status','=','completed')
+                 ->where('f_id','=',Auth::user()->f_id)->count();
+
+         $counts['cancelled']=DB::table('appointments')
+                ->where('status','=','cancelled')
+                 ->where('f_id','=',Auth::user()->f_id)->count();
+
+         $counts['incomplete']=DB::table('appointments')
+                ->where('status','=','incomplete')
+                 ->where('f_id','=',Auth::user()->f_id)->count();
+
         $appointments = DB::table('appointments')
             ->join('students', 'appointments.s_id', '=', 'students.s_id')
             ->select('appointments.*','students.name', 'students.email', 'students.photo','students.phone')
             ->where('appointments.f_id','=',Auth::user()->f_id)
             ->where('appointments.status','!=','deleted')
+            ->orderBy('id','DESC')
             ->paginate(10);
 
-        return view('faculty.appointments')->with('appointments',$appointments);
+        return view('faculty.appointments',compact('appointments','counts'));
     }
 
     public function appointmentForm()

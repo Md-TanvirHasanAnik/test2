@@ -52,16 +52,17 @@ class RegisterController extends Controller
     {
         return Validator::make($data, [
             'name' => ['required', 'string', 'max:255'],
-            'f_id' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'f_id' => ['required', 'string', 'max:255','unique:faculties'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:faculties','regex:/(.*)diu\.edu\.bd$/i'],
             'phone' => ['required', 'string', 'max:255'],
             'department' => ['required', 'string', 'max:255'],
-            'photo' => ['string', 'max:255'],
+             'designation' => ['required', 'string', 'max:255'],
+            'faculty' => ['string', 'max:255'],
             'password' => ['required', 'string', 'min:6', 'confirmed'],
         ]);
     }
 
-    /**
+     /**
      * Create a new user instance after a valid registration.
      *
      * @param  array  $data
@@ -69,12 +70,16 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
+
         return Faculty::create([
             'name' => $data['name'],
-            'f_id' => $data['s_id'],
+            'f_id' => $data['f_id'],
             'email' => $data['email'],
             'phone' => $data['phone'],
             'department' => $data['department'],
+              'designation' => $data['designation'],
+            'faculty' => $data['faculty'],
+            'photo' => '/images/default.jpg',
             'password' => Hash::make($data['password']),
         ]);
     }
@@ -88,6 +93,8 @@ class RegisterController extends Controller
     {
         return view('authFaculty.register');
     }
+
+   
 
     /**
      * Get the guard to be used during registration.

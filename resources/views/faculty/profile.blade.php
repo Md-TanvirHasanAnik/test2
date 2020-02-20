@@ -35,8 +35,17 @@
             <div class="row">
                 <div class="col-md-4">
                     <div class="profile-work">
-                        <p>WORK LINK</p>
-                        <a href="">Website Link</a><br/>
+                        
+                        <p>Research Interests</p>
+                         <ul>
+                        <?php $research_areas=explode(',',$faculty->research_area) ?>
+
+                        @foreach($research_areas as $research_area)
+                        <li>{{$research_area}}</li>
+                        @endforeach
+                        </ul>
+                        <p>Portfolio</p>
+                        <a href="{{$faculty->portfolio}}">Portfolio Website</a><br/>
 
                     </div>
                 </div>

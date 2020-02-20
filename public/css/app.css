@@ -4269,6 +4269,7 @@ input[type=button].btn-block {
   text-decoration: none;
 }
 
+
 .nav-link.disabled {
   color: #6c757d;
   pointer-events: none;
@@ -4713,6 +4714,7 @@ input[type=button].btn-block {
 .navbar-dark .navbar-nav .nav-link.active {
   color: #fff;
 }
+
 
 .navbar-dark .navbar-toggler {
   color: rgba(255, 255, 255, 0.5);

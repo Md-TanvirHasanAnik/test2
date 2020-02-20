@@ -42,7 +42,10 @@ class ScheduleController extends Controller
             ->where('semester','=',$current_semester->current_semester)
             ->first();
 
-        $slots=TimeSlot::all();
+        $slots=DB::table('time_slots')
+            ->select('*')
+            ->where('type','regular')
+            ->get();
        // return $slots;
 
         $schedules = DB::table('schedules')
@@ -50,9 +53,14 @@ class ScheduleController extends Controller
             ->where('f_id',Auth::user()->f_id)
             ->get();
 
+            $available=DB::table('faculties')
+            ->select('available')
+            ->where('f_id',Auth::user()->f_id)
+            ->first();
+
 //        return $schedules;
 //        return $slots;
-        return view('faculty.schedule',compact('semester','slots','schedules'));
+        return view('faculty.schedule',compact('semester','slots','schedules','available'));
 
     }
 
